@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void mold(char* frase[])
+{
+     int i;
+     putchar('\n');
+     for (i=0; i<=2*(strlen(frase)+6);i++)
+     {
+         if((i>=0&&i<strlen(frase)+6) || i==strlen(frase)+7 || i==2*(strlen(frase)+6))
+         putchar('*');
+         else if (i==strlen(frase)+6)
+         putchar('\n');
+         else
+         putchar(' ');
+     }
+     
+     printf("\n*  %s  *\n", frase);
+     
+     for (i=2*(strlen(frase)+6); i>=0;i--)
+     {
+         if((i>=0&&i<strlen(frase)+6) || i==strlen(frase)+7 || i==2*(strlen(frase)+6))
+         putchar('*');
+         else if (i==strlen(frase)+6)
+         putchar('\n');
+         else
+         putchar(' ');
+     }
+     putchar('\n'); putchar('\n');
+}
+
+int main()
+{
+    char c[20];
+    while(1){
+    gets(c);
+    mold(c);
+}
+    return 0;
+}
