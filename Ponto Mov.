@@ -1,40 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
-void mold(char* frase[])
+void main ()
 {
-     int i;
-     putchar('\n');
-     for (i=0; i<=2*(strlen(frase)+6);i++)
-     {
-         if((i>=0&&i<strlen(frase)+6) || i==strlen(frase)+7 || i==2*(strlen(frase)+6))
-         putchar('*');
-         else if (i==strlen(frase)+6)
-         putchar('\n');
-         else
-         putchar(' ');
-     }
-     
-     printf("\n*  %s  *\n", frase);
-     
-     for (i=2*(strlen(frase)+6); i>=0;i--)
-     {
-         if((i>=0&&i<strlen(frase)+6) || i==strlen(frase)+7 || i==2*(strlen(frase)+6))
-         putchar('*');
-         else if (i==strlen(frase)+6)
-         putchar('\n');
-         else
-         putchar(' ');
-     }
-     putchar('\n'); putchar('\n');
-}
-
-int main()
-{
-    char c[20];
-    while(1){
-    gets(c);
-    mold(c);
-}
-    return 0;
+    char mapa[31][31], dir;
+    int i, j, x=0, y=0, v;
+    while(1)
+    {
+        for (i=0; i<31; i++)
+        {
+            for (j=0; j<31; j++)
+            {
+                if(i==x && j==y)
+                {
+                    mapa[i][j]='O';
+                    printf("%c ", mapa[i][j]);
+                }
+                else
+                {
+                    mapa[i][j]=' ';
+                    printf("%c ", mapa[i][j]);
+                }
+            }
+            putchar('\n');
+        }
+        dir=getch();
+        switch (dir)
+        {
+        case 'w':
+            x--;
+            break;
+        case 's':
+            x++;
+            break;
+        case 'a':
+            y--;
+            break;
+        case 'd':
+            y++;
+            break;
+        }
+        system("cls");
+    }
 }
