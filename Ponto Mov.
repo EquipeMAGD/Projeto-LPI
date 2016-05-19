@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+
 void main ()
 {
     char matriz[10][10], i, j;
