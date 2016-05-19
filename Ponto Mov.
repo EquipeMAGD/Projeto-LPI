@@ -1,38 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
 
-void main ()
+void mold(char* frase[])
 {
-    char matriz[10][10], i, j;
-    int v;
-    //matriz[0][0]='*';
-    while(1)
-    {
-        for(i=0; i<10; i++)
-        {
-            v=i;
-            for(j=0; j<10; j++)
-            {
-                if(j==0)
-                    matriz[i][j]='*';
-                else
-                    matriz[i][j]=' ';
-                if(matriz[i-1][j]=='*')
-                    matriz[i-1][j]=' ';
+     int i;
+     putchar('\n');
+     for (i=0; i<=2*(strlen(frase)+6);i++)
+     {
+         if((i>=0&&i<strlen(frase)+6) || i==strlen(frase)+7 || i==2*(strlen(frase)+6))
+         putchar('*');
+         else if (i==strlen(frase)+6)
+         putchar('\n');
+         else
+         putchar(' ');
+     }
+     
+     printf("\n*  %s  *\n", frase);
+     
+     for (i=2*(strlen(frase)+6); i>=0;i--)
+     {
+         if((i>=0&&i<strlen(frase)+6) || i==strlen(frase)+7 || i==2*(strlen(frase)+6))
+         putchar('*');
+         else if (i==strlen(frase)+6)
+         putchar('\n');
+         else
+         putchar(' ');
+     }
+     putchar('\n'); putchar('\n');
+}
 
-                printf("%c", matriz[i][j]);
-
-
-            }
-            Sleep(500);
-            system("cls");
-            putchar('\n');
-            while(v>0)
-            {
-                v--;
-                putchar('\n');
-            }
-        }
-    }
-  }
+int main()
+{
+    char c[20];
+    while(1){
+    gets(c);
+    mold(c);
+}
+    return 0;
+}
