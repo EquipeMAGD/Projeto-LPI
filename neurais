@@ -16,16 +16,22 @@ int peso_novo(int peso_antigo)
 
 main()
 {
-    int neti, n=0,j=0,i, x[3][2], desejado[4];
+    int neti, n=0,j=0,i,k, x[3][100], desejado[4];
+
+
     for(i=0;i<2; i++,x)
     {
         for(j=0; j<2; j++)
-        {   x[0][i]=i;
+        {
+            for(k=0;k<2;k++){
+            x[0][i]=i;
             x[1][j]=j;
-            printf("Para x1=%d e x2=%d o resultado desejado eh ", x[0][i], x[1][j]);
+            x[2][k]=k;
+            printf("Para x1=%d e x2=%d e x3=%d o resultado desejado eh ", x[0][i], x[1][j],x[2][k]);
             scanf("%d", &desejado[n]);
             n++;
             putchar('\n');
+            }
         }
 
     }
@@ -33,9 +39,11 @@ main()
     {
         for(j=0; j<2; j++)
         {
-            printf("| x1= %d | x2= %d | %d", x[0][i], x[1][j],desejado[n]);
+            for(k=0;k<2;k++){
+            printf("| x1= %d | x2= %d | x3=%d |%d", x[0][i], x[1][j],x[2][k],desejado[n]);
             putchar('\n');
             n++;
+            }
         }
     }
 }
