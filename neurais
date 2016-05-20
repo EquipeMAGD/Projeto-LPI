@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int func(int neti)
+{
+    if (neti>=0) return 1;
+    else return 0;
+}
+
+int peso_novo(int peso_antigo)
+{
+    //int *w=&
+    static alfa=1;
+    return 0;
+}
+
+main()
+{
+    int neti, n=0,j=0,i, x[3][2], desejado[4];
+    for(i=0;i<2; i++,x)
+    {
+        for(j=0; j<2; j++)
+        {   x[0][i]=i;
+            x[1][j]=j;
+            printf("Para x1=%d e x2=%d o resultado desejado eh ", x[0][i], x[1][j]);
+            scanf("%d", &desejado[n]);
+            n++;
+            putchar('\n');
+        }
+
+    }
+    for(n=0,i=0;i<2; i++,x)
+    {
+        for(j=0; j<2; j++)
+        {
+            printf("| x1= %d | x2= %d | %d", x[0][i], x[1][j],desejado[n]);
+            putchar('\n');
+            n++;
+        }
+    }
+}
