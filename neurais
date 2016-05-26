@@ -2,21 +2,25 @@
 #include<stdlib.h>
 #include<math.h>
 
-main()
-{  //matriz tabela com[x possibilidades] [x variaveis]
-     int possib[16400][14];
-   // variaveis e contadores
-     int desejado[16400],i,j,quant_var;
+int main()
+{
+     // variaveis e contadores
+    int desejado[16400],i,j,quant_var, teste;
+    int WijN[quant_var], WijA[quant_var], alfa=1;
+    int Y=5, net=0, contnet;  WijN[0]=0;
+    int possib[16400][14];
+        
     scanf("%d",&quant_var);
- //for pra declarar todos as possicoes da matriz como 0
+    //for pra declarar todos as possicoes da matriz como 0
     for(i=0;i<pow(2,quant_var);i++)
     {
         for(j=0;j<quant_var;j++){
           possib[i][j]=0;
        // printf(" %d",possib[i][j]);
         }
-   // putchar('\n');
+     // putchar('\n');
     }
+    //matriz tabela com[x possibilidades] [x variaveis]
     for(i=0;i<pow(2,quant_var);i++)
     {//montando a tabela vdd
         for(j=quant_var;j>0;j--)
@@ -31,36 +35,43 @@ main()
         //copiando o vetor
         for(j=quant_var;j>0;j--)
         possib[i+1][j]=possib[i][j];
-        //printf(" : ");
+        printf(" : ");
         //putchar('\n');
         //getch();
        scanf("%d",&desejado[i]);
         possib[i+1][quant_var]=possib[i][quant_var]+1;
     }
-
-    int WijN[quant_var], WijA[quant_var], alfa=1;
-    int Y, net=0, contnet;  WijN[0]=0;
+    
     //PESOS INICIAIS
     for(contnet=1; contnet<=quant_var; contnet++)
     {
         WijN[contnet]=3;
     }
-    //função NETI
+ 
+ for(teste=0; Y!=desejado[teste]; teste++)
+ { 
+     //função NETI
     for(contnet=0; contnet<=quant_var; contnet++ )
     {
         if(contnet==0)net+=WijN[contnet]*1;
-        else net+=WijN[contnet]*possib[0][contnet];
+        else net+=WijN[contnet]*possib[teste][contnet];
     }
-   // printf("%i",net);
+    printf("\n\t***%i NET",net);
     //FUNÇÃO y (FNETI)
     Y=net>=0?1:0;
+    printf("\n\n\t** Y=  %i / Desejado= %i  \n", Y, desejado[teste]);
     //FUNÇÃO PESOS NOVOS
     for(contnet=0; contnet<=quant_var; contnet++ )
     {
-        if(contnet==0)WijN[contnet]+=alfa*(desejado[0]-Y)*1;
-        else WijN[contnet]+=alfa*(desejado[0]-Y)*possib[0][contnet-1];
+        if(contnet==0)WijN[contnet]+=alfa*(desejado[teste]-Y)*1;
+        else WijN[contnet]+=alfa*(desejado[teste]-Y)*possib[teste][contnet];
     printf("%i\n",WijN[contnet]);
     }
-
-return;
+  
+    net=0;
+  //Y=net>=0?1:0;
+}
+printf("\n\n\t***** Y=  %i / Desejado= %i ******\n\n\tESTOU TREINADA..\n\n", Y, desejado[teste]);
+system("PAUSE");
+return 0;
 }
