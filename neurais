@@ -1,49 +1,40 @@
 #include<stdio.h>
 #include<stdlib.h>
-
-int func(int neti)
-{
-    if (neti>=0) return 1;
-    else return 0;
-}
-
-int peso_novo(int peso_antigo)
-{
-    //int *w=&
-    static alfa=1;
-    return 0;
-}
+#include<math.h>
 
 main()
-{
-    int neti, n=0,j=0,i,k, x[3][100], desejado[4];
-
-
-    for(i=0;i<2; i++,x)
+{  //matriz tabela com[x possibilidades] [x variaveis]
+    long int possib[32800][15];
+   // variaveis e contadores
+    long int desejado,i,j,quant_var;
+    scanf("%d",&quant_var);
+ //for pra declarar todos as possicoes da matriz como 0
+    for(i=0;i<pow(2,quant_var);i++)
     {
-        for(j=0; j<2; j++)
-        {
-            for(k=0;k<2;k++){
-            x[0][i]=i;
-            x[1][j]=j;
-            x[2][k]=k;
-            printf("Para x1=%d e x2=%d e x3=%d o resultado desejado eh ", x[0][i], x[1][j],x[2][k]);
-            scanf("%d", &desejado[n]);
-            n++;
-            putchar('\n');
-            }
+        for(j=0;j<quant_var;j++){
+          possib[i][j]=0;
+       // printf(" %d",possib[i][j]);
         }
-
+   // putchar('\n');
     }
-    for(n=0,i=0;i<2; i++,x)
-    {
-        for(j=0; j<2; j++)
+    for(i=0;i<pow(2,quant_var);i++)
+    {//montando a tabela vdd
+        for(j=quant_var;j>0;j--)
         {
-            for(k=0;k<2;k++){
-            printf("| x1= %d | x2= %d | x3=%d |%d", x[0][i], x[1][j],x[2][k],desejado[n]);
-            putchar('\n');
-            n++;
+            if(possib[i][j]>1)
+            {
+                possib[i][j]=0;
+                possib[i][j-1]+=1;
             }
+          //printf(" %d",possib[i][j]);
         }
+        //copiando o vetor
+        for(j=quant_var;j>0;j--)
+        possib[i+1][j]=possib[i][j];
+        //printf(" : ");
+        //putchar('\n');
+       // scanf("%d",&desejado);
+        possib[i+1][quant_var]=possib[i][quant_var]+1;
     }
+return;
 }
