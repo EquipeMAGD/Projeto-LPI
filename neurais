@@ -33,6 +33,7 @@ main()
         possib[i+1][j]=possib[i][j];
         //printf(" : ");
         //putchar('\n');
+        //getch();
        // scanf("%d",&desejado);
         possib[i+1][quant_var]=possib[i][quant_var]+1;
     }
