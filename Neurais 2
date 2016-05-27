@@ -1,96 +1,101 @@
 
-#include<stdio.h> 
-#include<stdlib.h> 
-#include<math.h> 
- 
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
 
- main() 
- {  //matriz tabela com[x possibilidades] [x variaveis] 
+
+ main()
+ {  //matriz tabela com[x possibilidades] [x variaveis]
  //scanf("%d",&n);
     //int **p = (int**)malloc(sizeof(int*)*quant_var);
     //for(i=0;i<quant_var;i++)
       //      p[i] = (int)malloc(sizeof(int)*pow(2,n));
-            
-      int possib[16400][14]; 
-   // variaveis e contadores 
-     int desejado[16400],i,j,quant_var,cont_con=0; 
-     scanf("%d",&quant_var); 
-  //for pra declarar todos as possicoes da matriz como 0 
-     for(i=0;i<pow(2,quant_var);i++) 
-     { 
-         for(j=0;j<quant_var;j++){ 
-           possib[i][j]=0; 
-        // printf(" %d",possib[i][j]); 
-         } 
-    // putchar('\n'); 
-     } 
-    for(i=0;i<pow(2,quant_var);i++) 
-     {//montando a tabela vdd 
-         for(j=quant_var;j>0;j--) 
-         { 
-            if(possib[i][j]>1) 
-             { 
-                 possib[i][j]=0; 
-                possib[i][j-1]+=1; 
-             } 
-           printf(" %d",possib[i][j]); 
-         } 
-         //copiando o vetor 
-         for(j=quant_var;j>0;j--) 
-         possib[i+1][j]=possib[i][j]; 
-         //printf(" : "); 
-         //putchar('\n'); 
-        //getch(); 
-        scanf("%d",&desejado[i]); 
-         possib[i+1][quant_var]=possib[i][quant_var]+1; 
-     } 
- 
- 
-     int WijN[quant_var], WijA[quant_var], alfa=1; 
-     int Y, net=0, contnet;  WijN[0]=0; 
-     //PESOS INICIAIS 
-     for(contnet=1; contnet<=quant_var; contnet++) 
-    { 
-         WijN[contnet]=3; 
-     } 
+      int possib[16400][14];
+   // variaveis e contadores
+     int desejado[16400],i,j,quant_var,cont_con=0;
+     scanf("%d",&quant_var);
+  //for pra declarar todos as possicoes da matriz como 0
+     for(i=0;i<pow(2,quant_var);i++)
+     {
+         for(j=0;j<quant_var;j++){
+           possib[i][j]=0;
+        // printf(" %d",possib[i][j]);
+         }
+    // putchar('\n');
+     }
+    for(i=0;i<pow(2,quant_var);i++)
+     {//montando a tabela vdd
+         for(j=quant_var-1;j>=0;j--)
+         {
+            if(possib[i][j]>1)
+             {
+                 possib[i][j]=0;
+                possib[i][j-1]+=1;
+             }
+           printf(" %d",possib[i][j]);
+         }
+         //copiando o vetor
+         for(j=quant_var-1;j>=0;j--)
+         possib[i+1][j]=possib[i][j];
+         printf(" : ");
+         //putchar('\n');
+        //getch();
+        scanf("%d",&desejado[i]);
+         possib[i+1][quant_var-1]=possib[i][quant_var-1]+1;
+     }
+
+
+     int WijN[quant_var], WijA[quant_var], alfa=1;
+     int Y, net=0, contnet;  WijN[0]=0;
+     //PESOS INICIAIS
+     for(contnet=1; contnet<=quant_var; contnet++)
+    {
+         WijN[contnet]=3;
+     }
      do{
+
+     for(i=0;i<pow(2,quant_var);i++){
+     //função NETI
+
+     for(contnet=0; contnet<=quant_var; contnet++ )
+     {
+         if(contnet==0)net=WijN[contnet]*1;
+         else net+=WijN[contnet]*possib[i][contnet-1];
+     }
+    // printf("%i",net);
+     //FUNÇÃO y (FNETI)
+     Y=net>=0?1:0;
+     //FUNÇÃO PESOS NOVOS
+     if(Y!=desejado[i]){
+     for(contnet=0; contnet<=quant_var; contnet++ )
+     {
+         if(contnet==0)WijN[contnet]+=alfa*(desejado[i]-Y)*1;
+        else WijN[contnet]+=alfa*(desejado[i]-Y)*possib[i][contnet-1];
+    printf("%i\n",WijN[contnet]);
+
+     }
+     }printf("================\n");getch();
+     }
+     for(j=0;j<quant_var;j++)
+    {
+             if(WijN[j]==WijA[j])
+       {
+         cont_con++;
+       }
+     }
+     for(contnet=0; contnet<=quant_var; contnet++ )
+    //printf("%i\n",WijN[contnet]);
+
      for(i=0;i<quant_var;i++){
      WijA[i]=WijN[i];
      }
-     for(i=0;i<pow(2,quant_var);i++){
-     //função NETI 
-     
-     for(contnet=0; contnet<=quant_var; contnet++ ) 
-     { 
-         if(contnet==0)net+=WijN[contnet]*1; 
-         else net+=WijN[contnet]*possib[i][contnet]; 
-     } 
-    // printf("%i",net); 
-     //FUNÇÃO y (FNETI) 
-     Y=net>=0?1:0; 
-     //FUNÇÃO PESOS NOVOS 
-     for(contnet=0; contnet<=quant_var; contnet++ ) 
-     { 
-         if(contnet==0)WijN[contnet]+=alfa*(desejado[i]-Y)*1; 
-        else WijN[contnet]+=alfa*(desejado[i]-Y)*possib[i][contnet-1]; 
-     printf("%i\n",WijN[contnet]); 
-     } 
-     for(j=0;j<quant_var;j++)
-    {
-             if(WijN[i]==WijA[i])
-       {
-         cont_con++;                                 
-       }
-     }
-     
-     }
      if(cont_con==quant_var)
      break;
+
+
 }while(1);
- 
-
-
-
+for(contnet=0; contnet<=quant_var; contnet++ )
+    printf("%i\n",WijN[contnet]);
     system("PAUSE");
     return EXIT_SUCCESS;
 }
