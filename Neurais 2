@@ -74,7 +74,7 @@
     printf("%i\n",WijN[contnet]);
 
      }
-     }printf("================\n");getch();
+     }printf("================\n");//getch();
      }
      for(j=0;j<quant_var;j++)
     {
