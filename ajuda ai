@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <conio.h>
+void main ()
+{
+    void textcolor (int cor);
+    char mapa[10][10], dir;
+    int i, j, x=0, y=0, v, c;
+    while(1)
+    {
+        for (i=0; i<10; i++)
+        {
+            for (j=0; j<10; j++)
+            {
+                if(i==x && j==y)
+                {
+                    mapa[i][j]='O';
+                    printf("%c ", mapa[i][j]);
+                }
+                else
+                {
+                    mapa[i][j]='*';
+                    printf("%c ", mapa[i][j]);
+                }
+            }
+            putchar('\n');
+        }
+        dir=getch();
+       // while(1)
+        {
+            //dir=c;
+            //c=getch();
+            switch (dir)
+            {
+            case 'w':
+                while(1)
+                {
+                    if(kbhit())
+                    {
+                        c=getch();
+                        break;
+                    }
+                    else
+                        x--;
+                        Sleep(500);
+                }
+            case 's':
+                while(1)
+                {
+                    if(kbhit())
+                    {
+                        c=getch();
+                        break;
+                    }
+                    else
+                        x++;
+                }
+            case 'a':
+                while(1)
+                {
+                    if(kbhit())
+                    {
+                        c=getch();
+                        break;
+                    }
+                    else
+                        y--;
+                }
+            case 'd':
+                while(1)
+                {
+                    if(kbhit())
+                    {
+                        c=getch();
+                        break;
+                    }
+                    else
+                        y++;
+                }
+            }
+        }
+        system("cls");
+    }
+}
