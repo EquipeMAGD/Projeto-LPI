@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <conio.h>
+
+void barreira(int *x, int *y)
+{
+    if(*x==19) *x=18;
+    if(*x==0) *x=1;
+    if(*y==19) *y=18;
+    if(*y==0) *y=1;
+}
+
+typedef struct coord
+{
+    int x, y;
+} coord;
+
+int main( )
+{
+    char matriz[20][20], c;
+    int i, j, t=50, ponto=0;
+    coord cir, fan;
+    cir.x=10;
+    cir.y=10;
+
+    for(i=0; i<20; i++){
+        for(j=0; j<20; j++){
+        if(i==0 || i==19){ matriz[i][j]=205;}
+        else if(j==0 || j==19){ matriz[i][j]=186;}
+        else  matriz[i][j]='*';
+        }
+    }
+    matriz[cir.x][cir.y]=' ';
+    while(1)
+    {
+        system("cls");
+        switch(c)
+        {
+            case 'w': cir.x-=1; break;
+            case 's': cir.x+=1; break;
+            case 'a': cir.y-=1; break;
+            case 'd': cir.y+=1; break;
+        }
+
+       barreira(&cir.x,&cir.y);
+        system("color 0E");
+        printf("Pontuacao: %d\n", ponto);
+        for(i=0; i<20; i++)
+        {
+            for(j=0; j<20; j++)
+            {
+
+                 if( matriz[i][j]=='*' && i==cir.x && j==cir.y)
+                    {
+                      ponto++; t=250;
+                      matriz[i][j]=' ';
+                      putchar(1);
+                      }
+                 else if( matriz[i][j]==' ' && i==cir.x && j==cir.y)
+                 {
+                     putchar(1);
+                     t=0;
+                 }
+                 else if(matriz[cir.x][cir.y]==205 || matriz[cir.x][cir.y]==186)
+                 {
+                      if(cir.x==19) cir.x=18;
+                      if(cir.x==0) cir.x=1;
+                      if(cir.y==19) cir.y=18;
+                      if(cir.y==0) cir.y=1;
+                 }
+                 else printf("%c", matriz[i][j]);
+
+            }
+            putchar('\n');
+        }
+        if(t>0)Beep( t,200);
+        else Sleep(300);
+       if(kbhit()) c=getch();
+    }
+}
