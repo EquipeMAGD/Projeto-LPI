@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+
+typedef struct coord
+{
+    int x, y;
+} coord;
+
+void direcao(int *x, int *y)
+{
+    static char c;
+    if(kbhit()) c=getch();
+    switch(c)
+    {
+    case 'w':*x-=1;break;
+    case 's':*x+=1;break;
+    case 'a':*y-=1;break;
+    case 'd':*y+=1;break;
+    }
+}
+
+void dirrand(int *x, int *y)
+{
+    int n;
+    static int cont=0;
+    cont++;
+    if(cont>3) n=rand()%4;
+    else n=0;
+    switch(n)
+    {
+    case 0:*x-=1;break;
+    case 1:*x+=1;break;
+    case 2:*y-=1;break;
+    case 3:*y+=1;break;
+    }
+}
+
+main()
+{
+    char matriz[20][20];
+    int i, j;
+    coord pm, fant[3];
+    pm.x=0;
+    pm.y=0;
+    fant[0].x=10;
+    fant[0].y=10;
+    while(1)
+    {
+        system("cls");
+
+        direcao(&pm.x, &pm.y);
+        dirrand(&fant[0].x, &fant[0].y);
+
+        for(i=0; i<20; i++)
+        {
+            for(j=0; j<20; j++)
+            {
+                if(i==pm.x&&j==pm.y) matriz[i][j]='O';
+                else if(i==fant[0].x&&j==fant[0].y) matriz[i][j]='M';
+                else matriz[i][j]=' ';
+                printf("%c", matriz[i][j]);
+            }
+            putchar('\n');
+        }
+        Sleep(300);
+    }
+}
