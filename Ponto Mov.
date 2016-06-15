@@ -4,28 +4,57 @@
 
 void main ()
 {
-    char mapa[31][31], dir;
-    int i, j, x=0, y=0, v;
+    char mapa[11][11], dir, corpo1[11][11], corpo2[11][11], aux[11][11];
+    int i, j, x=0, y=0, v=0, m=0, n=0, a=0, b=0, g=0, h=0;
     while(1)
     {
-        for (i=0; i<31; i++)
+        for (i=0; i<11; i++)
         {
-            for (j=0; j<31; j++)
+
+
+
+
+            for (j=0; j<11; j++)
             {
+
+                v++;
+                if (i==a && j==b)
+                {
+                    corpo2[a][b]='*';
+                    printf("%c", corpo2[a][b]);
+                }
+                if (i==m && j==n)
+                {
+                    corpo1[m][n]='*';
+                    printf("%c", corpo1[m][n]);
+                }
                 if(i==x && j==y)
                 {
                     mapa[i][j]='O';
-                    printf("%c ", mapa[i][j]);
+                    printf("%c", mapa[i][j]);
+
+
                 }
                 else
                 {
-                    mapa[i][j]=' ';
-                    printf("%c ", mapa[i][j]);
+                    mapa[i][j]='+';
+                    printf("%c", mapa[i][j]);
                 }
             }
             putchar('\n');
         }
-        dir=getch();
+
+        dir=timeout();
+        //dir=getch();
+        if(v>1)
+        {
+            g=m;
+            h=n;
+        }
+        m=x;
+        n=y;
+        a=g;
+        b=h;
         switch (dir)
         {
         case 'w':
@@ -44,3 +73,14 @@ void main ()
         system("cls");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
