@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <conio.h>
 
+//
 typedef struct coord
 {
     int x, y;
@@ -67,14 +68,17 @@ void dirrand(int *x, int *y)
 
 main()
 {
-    char matriz[20][20], c;
-    int i, j, t=50,aux,auxy, ponto=0, barra[20][20];
+    int matriz[20][20];
+    char c;
+    int i, j, t=50,aux[4],auxy[4], ponto=0, barra[20][20];
     coord pm, fant[3];
     pm.x=10;
     pm.y=10;
-    fant[0].x=10;
-    fant[0].y=10;
-
+    for(i=0; i<3; i++)
+    {
+        fant[i].x=10;
+        fant[i].y=10;
+    }
 
     for(i=0; i<20; i++)
         for(j=0; j<20; j++)
@@ -85,26 +89,12 @@ main()
         for(j=0; j<20; j++)
         {
 
-            if((i==0 || i==19))
-            {
-                matriz[i][j]=219;
-                barra[i][j]=1;
-            }
-            else if((j==0 || j==19) && i!= 10 )
-            {
-                matriz[i][j]=219;
-                barra[i][j]=1;
-            }
-            else  if(i==5 && j == 7)
-            {
-                matriz[i][j]=219;
-                barra[i][j]=1;
-            }
-            else if( (i==10 && j==0) || (i==10 && j==19))
-            {
-                matriz[i][j]=' ';
-            }
-            else  matriz[i][j]='*';
+            if((i==0 || i==19)) matriz[i][j]=219;
+            else if((j==0 || j==19) && i!= 10 ) matriz[i][j]=219;
+            else  if(i==5 && j == 7) matriz[i][j]=219;
+            else if( (i==10 && j==0) || (i==10 && j==19)) matriz[i][j]=' ';
+            else  matriz[i][j]=248;
+            if(matriz[i][j]==219) barra[i][j]=1;
 
         }
     }
@@ -113,34 +103,51 @@ main()
     while(1)
     {
         system("cls");
-        auxy=pm.y;
-        aux=pm.x;
+
+        auxy[3]=pm.y;
+        aux[3]=pm.x;
         direcao(&pm.x, &pm.y);
-        barreira(&pm.x,&pm.y,aux,auxy,barra);
-        dirrand(&fant[0].x, &fant[0].y);
-        barreira(&fant[0].x,&fant[0].y,aux,auxy,barra);
+        barreira(&pm.x,&pm.y,aux[3],auxy[3],barra);
+
+        for(i=0; i<3; i++)
+        {
+            auxy[i]=fant[i].y;
+            aux[i]=fant[i].x;
+            dirrand(&fant[i].x, &fant[i].y);
+            barreira(&fant[i].x,&fant[i].y,aux[i],auxy[i],barra);
+        }
+
         printf("Pontuacao: %d\n", ponto);
         for(i=0; i<20; i++)
         {
             for(j=0; j<20; j++)
             {
 
-                if( matriz[i][j]=='*' && i==pm.x && j==pm.y)
+                if( matriz[i][j]==248 && i==pm.x && j==pm.y)
                 {
                     ponto++;
                     t=250;
-                    matriz[i][j]=' '; putchar('O');
+                    matriz[i][j]=' ';
+                    putchar('N');
                 }
                 else if( matriz[i][j]==' ' && i==pm.x && j==pm.y)
                 {
                     t=0;
-                    putchar('O');
+                    putchar('N');//Pac-Man
                 }
 
                 //if(i==pm.x&&j==pm.y) matriz[i][j]='O';
                 else if(i==fant[0].x && j==fant[0].y)
                 {
-                    putchar('M');
+                    putchar(145); //fantasma
+                }
+                else if(i==fant[1].x && j==fant[1].y)
+                {
+                    putchar(145);//fantasma
+                }
+                else if(i==fant[2].x && j==fant[2].y)
+                {
+                    putchar(145);//fantasma
                 }
                 //else matriz[i][j]=' ';
                 else printf("%c", matriz[i][j]);
