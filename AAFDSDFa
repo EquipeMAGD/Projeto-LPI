@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <conio.h>
+#include <dos.h>
 
 //
 typedef struct coord
@@ -9,14 +10,14 @@ typedef struct coord
     int x, y;
 } coord;
 
-void barreira(int *x, int *y,int antgx,int antgy,int barra[20][20])
+void barreira(int *x, int *y,int antgx,int antgy,int barra[20][30])
 {
     if(barra[*x][*y]==1) *x=antgx;
     if(barra[*x][*y]==1) *x=antgx;
     if(barra[*x][*y]==1) *y=antgy;
     if(barra[*x][*y]==1) *y=antgy;
-    if(*y==19) *y=0;
-    else if(*y==0) *y=19;
+    if(*y==29) *y=0;
+    else if(*y==0) *y=29;
     if(*x==0) *x=19;
     else if(*x==19) *x=0;
 }
@@ -66,33 +67,45 @@ void dirrand(int *x, int *y)
     }
 }
 
+void GAMEOVER(void)
+{
+    system("cls");
+    printf("\n\n\n\n\n\t\t\tGAME OVER\n\n\n\t\tPrecione qualquer tecla...\n\n");
+    getch();
+    main();
+}
+
 main()
 {
-    int matriz[20][20];
+    int matriz[20][30];
     char c;
-    int i, j, t=50,aux[4],auxy[4], ponto=0, barra[20][20];
+    int i, j, t=50,aux[4],auxy[4], ponto=0, barra[20][30];
     coord pm, fant[3];
-    pm.x=10;
-    pm.y=10;
+    pm.x=18;
+    pm.y=1;
     for(i=0; i<3; i++)
     {
         fant[i].x=10;
-        fant[i].y=10;
+        fant[i].y=15;
     }
 
     for(i=0; i<20; i++)
-        for(j=0; j<20; j++)
+        for(j=0; j<30; j++)
             barra[i][j]=0;
 
     for(i=0; i<20; i++)
     {
-        for(j=0; j<20; j++)
+        for(j=0; j<30; j++)
         {
 
-            if((i==0 || i==19)) matriz[i][j]=219;
-            else if((j==0 || j==19) && i!= 10 ) matriz[i][j]=219;
-            else  if(i==5 && j == 7) matriz[i][j]=219;
-            else if( (i==10 && j==0) || (i==10 && j==19)) matriz[i][j]=' ';
+            if((i==0 || i==19))
+                matriz[i][j]=219;
+            else if((j==0 || j==29) && i!= 10 )
+                matriz[i][j]=219;
+            else  if(i==5 && j == 7)
+                matriz[i][j]=219;
+            else if( (i==10 && j==0) || (i==10 && j==29))
+                matriz[i][j]=' ';
             else  matriz[i][j]=248;
             if(matriz[i][j]==219) barra[i][j]=1;
 
@@ -104,23 +117,29 @@ main()
     {
         system("cls");
 
-        auxy[3]=pm.y;
-        aux[3]=pm.x;
-        direcao(&pm.x, &pm.y);
-        barreira(&pm.x,&pm.y,aux[3],auxy[3],barra);
-
         for(i=0; i<3; i++)
         {
             auxy[i]=fant[i].y;
             aux[i]=fant[i].x;
             dirrand(&fant[i].x, &fant[i].y);
             barreira(&fant[i].x,&fant[i].y,aux[i],auxy[i],barra);
+            if(fant[i].x==pm.x && fant[i].y==pm.y)
+            {
+                GAMEOVER();
+            }
         }
+
+        auxy[3]=pm.y;
+        aux[3]=pm.x;
+        direcao(&pm.x, &pm.y);
+        barreira(&pm.x,&pm.y,aux[3],auxy[3],barra);
+
+
 
         printf("Pontuacao: %d\n", ponto);
         for(i=0; i<20; i++)
         {
-            for(j=0; j<20; j++)
+            for(j=0; j<30; j++)
             {
 
                 if( matriz[i][j]==248 && i==pm.x && j==pm.y)
@@ -139,21 +158,28 @@ main()
                 //if(i==pm.x&&j==pm.y) matriz[i][j]='O';
                 else if(i==fant[0].x && j==fant[0].y)
                 {
-                    putchar(145); //fantasma
+                    putchar(182); //fantasma
                 }
                 else if(i==fant[1].x && j==fant[1].y)
                 {
-                    putchar(145);//fantasma
+                    putchar(182);//fantasma
                 }
                 else if(i==fant[2].x && j==fant[2].y)
                 {
-                    putchar(145);//fantasma
+                    putchar(182);//fantasma
                 }
                 //else matriz[i][j]=' ';
                 else printf("%c", matriz[i][j]);
             }
             putchar('\n');
         }
-        Sleep(350);
+        for(i=0; i<3; i++)
+        {
+            if(fant[i].x==pm.x && fant[i].y==pm.y)
+            {
+                GAMEOVER();
+            }
+        }
+        Sleep(250);
     }
 }
