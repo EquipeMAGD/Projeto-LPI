@@ -9,35 +9,6 @@ typedef struct coord
 {
     int x, y;
 } coord;
-void barreirafant(int *x, int *y,int antgx,int antgy,int barra[20][30])
-{   int a=*x,b=*y,c;
-do{
-    if(barra[*x][*y]==1) {*x=antgx;*y=antgy;}
-    if(*y==29) *y=0;
-    else if(*y==0) *y=29;
-    //if(*x==0) *x=19;
-   // else if(*x==19) *x=0;
-    if(a!=*x || b!=*y){
-    //dirrand(x,y);
-    c=rand()%4;
-    switch(c)
-    {
-    case 0:
-        *x-=1;
-        break;
-    case 1:
-        *x+=1;
-        break;
-    case 2:
-        *y-=1;
-        break;
-    case 3:
-        *y+=1;
-        break;
-      }
-    }
- }while(barra[*x][*y]==1);
-}
 
 void barreira(int *x, int *y,int antgx,int antgy,int barra[20][30])
 {
@@ -101,6 +72,18 @@ void GAMEOVER(void)
     main();
 }
 
+void barreirafant(int *x, int *y,int antgx,int antgy,int barra[20][30])
+{   int a=*x,b=*y,c;
+do{
+    if(barra[*x][*y]==1) {*x=antgx;*y=antgy;}
+    if(*y==29) *y=0;
+    else if(*y==0) *y=29;
+    if(a!=*x || b!=*y){
+    dirrand(x,y);
+      }
+
+ }while(barra[*x][*y]==1);
+}
 main()
 {
     int matriz[20][30];
