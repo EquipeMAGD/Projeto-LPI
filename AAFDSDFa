@@ -64,6 +64,23 @@ void dirrand(int *x, int *y)
     }
 }
 
+void arquivos(){
+     char nome[20]; char rp;
+    FILE *file;
+    file = fopen("ranking.txt","a");
+    printf("\tDigite seu nome..\n\t");
+    gets(nome);
+    fputs(nome,file);
+    fputc('\n',file);
+    fclose(file);
+    system("cls");
+    printf("\nJOGAR NOVAMENTE?\n");
+    rp = getche();
+    if(rp=='s' || rp=='S');
+    else return 0;
+    }
+
+
 void GAMEOVER(void)
 {
     system("cls");
@@ -192,3 +209,6 @@ main()
         Sleep(250);
     }
 }
+/*  if(pis%2==0){putchar('C');
+                    }
+                    else putchar('0'); */
