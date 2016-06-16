@@ -4,18 +4,44 @@
 #include <conio.h>
 #include <dos.h>
 
-//
+
 typedef struct coord
 {
     int x, y;
 } coord;
+void barreirafant(int *x, int *y,int antgx,int antgy,int barra[20][30])
+{   int a=*x,b=*y,c;
+do{
+    if(barra[*x][*y]==1) {*x=antgx;*y=antgy;}
+    if(*y==29) *y=0;
+    else if(*y==0) *y=29;
+    //if(*x==0) *x=19;
+   // else if(*x==19) *x=0;
+    if(a!=*x || b!=*y){
+    //dirrand(x,y);
+    c=rand()%4;
+    switch(c)
+    {
+    case 0:
+        *x-=1;
+        break;
+    case 1:
+        *x+=1;
+        break;
+    case 2:
+        *y-=1;
+        break;
+    case 3:
+        *y+=1;
+        break;
+      }
+    }
+ }while(barra[*x][*y]==1);
+}
 
 void barreira(int *x, int *y,int antgx,int antgy,int barra[20][30])
 {
-    if(barra[*x][*y]==1) *x=antgx;
-    if(barra[*x][*y]==1) *x=antgx;
-    if(barra[*x][*y]==1) *y=antgy;
-    if(barra[*x][*y]==1) *y=antgy;
+    if(barra[*x][*y]==1) {*x=antgx;*y=antgy;}
     if(*y==29) *y=0;
     else if(*y==0) *y=29;
     if(*x==0) *x=19;
@@ -122,7 +148,7 @@ main()
             auxy[i]=fant[i].y;
             aux[i]=fant[i].x;
             dirrand(&fant[i].x, &fant[i].y);
-            barreira(&fant[i].x,&fant[i].y,aux[i],auxy[i],barra);
+            barreirafant(&fant[i].x,&fant[i].y,aux[i],auxy[i],barra);
             if(fant[i].x==pm.x && fant[i].y==pm.y)
             {
                 GAMEOVER();
