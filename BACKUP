@@ -127,7 +127,7 @@ main()
     }
 
     for(i=0; i<31; i++) a[i]=b[i];
-    a[0] ="3111111111111881111111111114";
+    a[0] ="311111111111MAGD111111111114";
     a[1] ="2            bb            2";
     a[2] ="2 caad caaad bb caaad caad 2";
     a[3] ="2 b00b b000b bb b000b b00b 2";
@@ -148,16 +148,16 @@ main()
     a[18]="000002 bb caaaaaad bb 200000";
     a[19]="311115 fe faadcaae fe 611114";
     a[20]="2            bb            2";
-    a[21]="2 caad caaad bb caad caaad 2";
-    a[22]="2 faae faaae fe faaae faae 2";
+    a[21]="2 caad caaad bb caaad caad 2";
+    a[22]="2 fadb faaae fe faaae bcae 2";
     a[23]="2   bb                bb   2";
-    a[24]="714 bb cd cbbbbbbd cd bb 319";
+    a[24]="714 bb cd caaaaaad cd bb 319";
     a[25]="715 fe bb faadcaae bb fe 619";
-    a[26]="6111111111111111111111111111115";
-    a[27]="6111111111111111111111111111115";
-    a[28]="6111111111111111111111111111115";
-    a[29]="6111111111111111111111111111115";
-    a[30]="6111111111111111111111111111115";
+    a[26]="2      bb    bb    bb      2";
+    a[27]="2 caaaaefaad bb caaefaaaad 2";
+    a[28]="2 faaaaaaaae fe faaaaaaaae 2";
+    a[29]="2                          2";
+    a[30]="6111111111111111111111111115";
 
     //DEFINIÇÃO DAS BARREIRAS
     for(i=0; i<31; i++)
@@ -185,6 +185,12 @@ main()
             case 'd': matriz[i][j]=191; break;
             case 'e': matriz[i][j]=217; break;
             case 'f': matriz[i][j]=192; break;
+
+            //NOME
+            case 'M': matriz[i][j]='M'; break;
+            case 'A': matriz[i][j]='A'; break;
+            case 'G': matriz[i][j]='G'; break;
+            case 'D': matriz[i][j]='D'; break;
 
             case ' ': matriz[i][j]=250; break;
             case '0': matriz[i][j]=' '; break;
