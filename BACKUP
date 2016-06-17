@@ -11,17 +11,15 @@ typedef struct coord
     int x, y;
 } coord;
 
-void barreira(int *x, int *y,int antgx,int antgy,int barra[21][31])
+void barreira(int *x, int *y,int antgx,int antgy,int barra[31][28])
 {
     if(barra[*x][*y]==1)
     {
         *x=antgx;
         *y=antgy;
     }
-    if(*y==30) *y=0;
-    else if(*y==0) *y=30;
-    if(*x==0) *x=20;
-    else if(*x==20) *x=0;
+    if(*y==27) *y=0;
+    else if(*y==0) *y=27;
 }
 
 void direcao(int *x, int *y)
@@ -94,7 +92,7 @@ void GAMEOVER(int ponto)
     else exit(1);
 }
 
-void barreirafant(int *x, int *y,int antgx,int antgy,int barra[21][31])
+void barreirafant(int *x, int *y,int antgx,int antgy,int barra[31][28])
 {
     do
     {
@@ -104,57 +102,67 @@ void barreirafant(int *x, int *y,int antgx,int antgy,int barra[21][31])
             *y=antgy;
             dirrand(x,y);
         }
-        if(*y==30) *y=0;
-        else if(*y==0) *y=30;
+        if(*y==27) *y=0;
+        else if(*y==0) *y=27;
     }
     while(barra[*x][*y]==1);
 }
 
 main()
 {
-    int matriz[21][31];
+    int matriz[31][28];
     char c;
-    char b[21][32],*a[21];
+    char b[31][29],*a[31];
 
-    int i, j,pis=1, t=50,aux[4],auxy[4], ponto=0, barra[21][31];
+    int i, j,pis=1, t=50,aux[4],auxy[4], ponto=0, barra[31][28];
     coord pm, fant[3];
 
     //DEFINIÇÃO DE COORDENADAS INICIAIS
-    pm.x=11;
-    pm.y=15;
+    pm.x=17;
+    pm.y=14;
     for(i=0; i<3; i++)
     {
-        fant[i].x=10;
-        fant[i].y=15;
+        fant[i].x=15;
+        fant[i].y=14;
     }
 
-    for(i=0; i<21; i++) a[i]=b[i];
-    a[0] ="3111111111111118111111111111114";
-    a[1] ="2##############2##############2";
-    a[2] ="2#caaad#caaaad#2#caaaad#caaad#2";
-    a[3] ="2#faaae#faaaae#2#faaaae#faaae#2";
-    a[4] ="2#############################2";
-    a[5] ="2#111111#11#1111111#11#111111#2";
-    a[6] ="2#############################2";
-    a[7] ="714#caad#cd000000000cd#caad#319";
-    a[8] ="202#b00b#bb031101140bb#b00b#202";
-    a[9] ="715#faae#fe020000020fe#faae#619";
-    a[10]="0##########061111150##########0";
-    a[11]="714#caad#cd000000000cd#caad#319";
-    a[12]="715#faae#fe#1118111#fe#faae#619";
-    a[13]="2##############2##############2";
-    a[14]="2#111114#11111#2#11111#311111#2";
-    a[15]="2######2###############2######2";
-    a[16]="711111#2#caaad#1#caaad#2#111119";
-    a[17]="2########b000b#1#b000b########2";
-    a[18]="2#1111111faaae#1#faaaeaaaaaaa#2";
-    a[19]="2#############################2";
-    a[20]="6111111111111111111111111111115";
+    for(i=0; i<31; i++) a[i]=b[i];
+    a[0] ="3111111111111881111111111114";
+    a[1] ="2            bb            2";
+    a[2] ="2 caad caaad bb caaad caad 2";
+    a[3] ="2 b00b b000b bb b000b b00b 2";
+    a[4] ="2 faae faaae fe faaae faae 2";
+    a[5] ="2                          2";
+    a[6] ="2 caad cd caaaaaad cd caad 2";
+    a[7] ="2 faae bb faadcaae bb faae 2";
+    a[8] ="2      bb    bb    bb      2";
+    a[9] ="611114 bfaad bb caaeb 311115";
+    a[10]="000002 bcaae fe faadb 200000";
+    a[11]="000002 bb          bb 200000";
+    a[12]="000002 bb 31100114 bb 200000";
+    a[13]="111115 fe 20000002 fe 611111";
+    a[14]="0         20000002         0";
+    a[15]="111114 cd 20000002 cd 311111";
+    a[16]="000002 bb 61111115 bb 200000";
+    a[17]="000002 bb          bb 200000";
+    a[18]="000002 bb caaaaaad bb 200000";
+    a[19]="311115 fe faadcaae fe 611114";
+    a[20]="2            bb            2";
+    a[21]="2 caad caaad bb caad caaad 2";
+    a[22]="2 faae faaae fe faaae faae 2";
+    a[23]="2   bb                bb   2";
+    a[24]="714 bb cd cbbbbbbd cd bb 319";
+    a[25]="715 fe bb faadcaae bb fe 619";
+    a[26]="6111111111111111111111111111115";
+    a[27]="6111111111111111111111111111115";
+    a[28]="6111111111111111111111111111115";
+    a[29]="6111111111111111111111111111115";
+    a[30]="6111111111111111111111111111115";
 
     //DEFINIÇÃO DAS BARREIRAS
-    for(i=0; i<21; i++)
+    for(i=0; i<31; i++)
     {
-        for(j=0; j<31; j++)
+        for(j=0; j<28; j++)
         {
             barra[i][j]=0;
             switch(a[i][j])
@@ -178,8 +186,8 @@ main()
             case 'e': matriz[i][j]=217; break;
             case 'f': matriz[i][j]=192; break;
 
-            case '#': matriz[i][j]=250; break;
-            default: matriz[i][j]=' '; break;
+            case ' ': matriz[i][j]=250; break;
+            case '0': matriz[i][j]=' '; break;
             }
             /*/
             if((a[i][j])=='1') matriz[i][j]=219;
@@ -212,9 +220,9 @@ main()
         barreira(&pm.x,&pm.y,aux[3],auxy[3],barra);
 
         printf("Pontuacao: %d\n", ponto);
-        for(i=0; i<21; i++)
+        for(i=0; i<31; i++)
         {
-            for(j=0; j<31; j++)
+            for(j=0; j<28; j++)
             {
 
                 if( matriz[i][j]==250 && i==pm.x && j==pm.y)
