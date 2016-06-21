@@ -21,13 +21,14 @@ void barreira(int *x, int *y,int antgx,int antgy,int barra[31][28])
 
 void direcao(int *x, int *y, int barra[31][28])
 {
-    static char c, c2, f='a';
+    static char c, c2, f;
     int antgx=*x, antgy=*y;
 
     if(kbhit())
     {
         c2=c;
         c=getch();
+        f=1;
     }
     switch(c)
     {
@@ -43,17 +44,35 @@ void direcao(int *x, int *y, int barra[31][28])
     case 'd':
         *y+=1;
         break;
-    }
-    if(*y==27) *y=0;
-    else if(*y==0) *y=27;
 
-    if(barra[*x][*y]==1 ||barra[*x][*y]==2)
+    }
+    if ((barra[*x][*y]==1 || barra[*x][*y]==2)&& f==1)
     {
         *x=antgx;
         *y=antgy;
-        c=c2;
+        switch(c2)
+    {
+    case 'w':
+        *x-=1;
+        break;
+    case 's':
+        *x+=1;
+        break;
+    case 'a':
+        *y-=1;
+        break;
+    case 'd':
+        *y+=1;
+        break;
     }
-
+    }
+    else f=0;
+    if(*y==27) *y=0;
+    else if(*y==0) *y=27;
+    if (barra[*x][*y]==1 ||barra[*x][*y]==2)
+    {
+        *x=antgx;
+        *y=antgy;}
 }
 
 void dirrand(int *x, int *y)
