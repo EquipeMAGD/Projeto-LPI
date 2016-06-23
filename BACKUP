@@ -3,32 +3,24 @@
 #include <windows.h>
 #include <conio.h>
 #include <dos.h>
-int estagio=0;
-COORD coordi= {0,0}; // this is global variable
+int estagio=0, matriz[31][28], barra[31][28];
+
 //center of axis is set to the top left cornor of the screen
+COORD coordi= {0,0};
+
+typedef struct coord
+{
+    int x, y;
+} coord;
+
 void gotoxy(int x,int y)
 {
     coordi.X=x;
     coordi.Y=y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordi);
 }
-typedef struct coord
-{
-    int x, y;
-} coord;
 
-void barreira(int *x, int *y,int antgx,int antgy,int barra[31][28])
-{
-    if(barra[*x][*y]==1 ||barra[*x][*y]==2)
-    {
-        *x=antgx;
-        *y=antgy;
-    }
-    if(*y==27) *y=0;
-    else if(*y==0) *y=27;
-}
-
-void direcao(int *x, int *y, int barra[31][28])
+void direcao(int *x, int *y)
 {
     static char c, c2, f;
     int antgx=*x, antgy=*y;
@@ -85,12 +77,13 @@ void direcao(int *x, int *y, int barra[31][28])
     }
 }
 
-
 void dirrand(int *x, int *y,int xpac,int ypac)
 {
-    int n;
+    int n, antgx=*x, antgy=*y;
     static int cont=0;
+
     cont++;
+    //Faz seguir o Pacman
     if(*x==xpac || *y==ypac)
     {
         if(*x>xpac && *y==ypac)*x-=1;
@@ -98,7 +91,7 @@ void dirrand(int *x, int *y,int xpac,int ypac)
         else if(*y>ypac && *x==xpac)*y-=1;
         else *y+=1;
     }
-    else
+    else//Move aleatóriamente
     {
         if(cont>12) n=rand()%4;
         else n=0;
@@ -118,6 +111,24 @@ void dirrand(int *x, int *y,int xpac,int ypac)
             break;
         }
     }
+    do
+    {
+        if(barra[*x][*y]==2) //Barreira especial para a caixa dos fantasmas
+        {
+            *x-=1;
+            dirrand(x,y,0,0);
+        }
+        else if(barra[*x][*y]==1)//Recurssividade para que o fantasma não fique batendo na parede
+        {
+            *x=antgx;
+            *y=antgy;
+            dirrand(x,y,0,0);
+        }
+        //Dar a volta no mapa
+        if(*y==27) *y=0;
+        else if(*y==0) *y=27;
+    }
+    while(barra[*x][*y]==1);
 }
 
 void GAMEOVER(int ponto)
@@ -126,7 +137,8 @@ void GAMEOVER(int ponto)
     char rp;
 
     system("cls");
-    printf("\n\n\n\n\n\t\t\tGAME OVER\n\n\n\t\tPressione qualquer tecla...\n\n");
+    printf("\n\n\n\n\n\t\tGAME OVER"
+           "\n\n\tPressione qualquer tecla...\n\n");
     getch();
 
     FILE *file;
@@ -149,35 +161,14 @@ void GAMEOVER(int ponto)
     else exit(1);
 }
 
-void barreirafant(int *x, int *y,int antgx,int antgy,int barra[31][28])
-{
-    do
-    {
-        if(barra[*x][*y]==2)
-        {
-            *x-=1;
-        }
-        else if(barra[*x][*y]==1)
-        {
-            *x=antgx;
-            *y=antgy;
-            dirrand(x,y,0,0);
-        }
-        if(*y==27) *y=0;
-        else if(*y==0) *y=27;
-    }
-    while(barra[*x][*y]==1);
-}
-
 void main(int nivel)
 {
-    int matriz[31][28];
-    char c;
-    char b[31][29],*a[31];
-
-    int i, j,pis=1, t=50,aux[4],auxy[4], ponto=0, barra[31][28],especial=0;
+    int i, j, pis=1, t=50,aux[4],auxy[4], ponto=0,especial=0;
     int contcomida=0,duracaoesp,trocarface;
     coord pm, fant[3];
+
+    //matriz e ponteiro para desenho do mapa
+    char b[31][29],*a[31];
 
     system("cls");
 
@@ -192,40 +183,43 @@ void main(int nivel)
         auxy[i]=fant[i].y;
     }
 
-    for(i=0; i<31; i++) a[i]=b[i];
+    {//Desenho do Mapa
+        //Cada ponteiro de 'a' apontando para uma linha de 'b'
+        for(i=0; i<31; i++)
+            a[i]=b[i];
 
-    //Desenho do Mapa
-    a[0] ="311111111111MAGD111111111114";
-    a[1] ="2            bb            2";
-    a[2] ="2 caad caaad bb caaad caad 2";
-    a[3] ="2tb00b b000b bb b000b b00bt2";
-    a[4] ="2 faae faaae fe faaae faae 2";
-    a[5] ="2                          2";
-    a[6] ="2 caad cd caaaaaad cd caad 2";
-    a[7] ="2 faae bb faadcaae bb faae 2";
-    a[8] ="2      bb    bb    bb      2";
-    a[9] ="611114 bfaad bb caaeb 311115";
-    a[10]="000002 b000b fe b000b 200000";
-    a[11]="000002 bcaae    faadb 200000";
-    a[12]="000002 bb0000000000bb 200000";
-    a[13]="111115 fe0311aa1140fe 611111";
-    a[14]="0        0200000020        0";
-    a[15]="111114 cd0611111150cd 311111";
-    a[16]="000002 bb0000000000bb 200000";
-    a[17]="000002 bfd  caad  ceb 200000";
-    a[18]="000002 bce ce00fd fdb 200000";
-    a[19]="311115 fe  fadcae  fe 611114";
-    a[20]="2            bb            2";
-    a[21]="2 caad caaad bb caaad caad 2";
-    a[22]="2 fadb faaae fe faaae bcae 2";
-    a[23]="2   bb                bb   2";
-    a[24]="714 bb cd caaaaaad cd bb 319";
-    a[25]="715 fe bb faadcaae bb fe 619";
-    a[26]="2      bb    bb    bb      2";
-    a[27]="2tcaaaaefaad bb caaefaaaadt2";
-    a[28]="2 faaaaaaaae fe faaaaaaaae 2";
-    a[29]="2                          2";
-    a[30]="6111111111111111111111111115";
+        a[0] ="311111111111MAGD111111111114";
+        a[1] ="2            bb            2";
+        a[2] ="2 caad caaad bb caaad caad 2";
+        a[3] ="2tb00b b000b bb b000b b00bt2";
+        a[4] ="2 faae faaae fe faaae faae 2";
+        a[5] ="2                          2";
+        a[6] ="2 caad cd caaaaaad cd caad 2";
+        a[7] ="2 faae bb faadcaae bb faae 2";
+        a[8] ="2      bb    bb    bb      2";
+        a[9] ="611114 bfaad bb caaeb 311115";
+        a[10]="000002 b000b fe b000b 200000";
+        a[11]="000002 bcaae    faadb 200000";
+        a[12]="000002 bb0000000000bb 200000";
+        a[13]="111115 fe0311aa1140fe 611111";
+        a[14]="0        0200000020        0";
+        a[15]="111114 cd0611111150cd 311111";
+        a[16]="000002 bb0000000000bb 200000";
+        a[17]="000002 bfd  caad  ceb 200000";
+        a[18]="000002 bce ce00fd fdb 200000";
+        a[19]="311115 fe  fadcae  fe 611114";
+        a[20]="2            bb            2";
+        a[21]="2 caad caaad bb caaad caad 2";
+        a[22]="2 fadb faaae fe faaae bcae 2";
+        a[23]="2   bb                bb   2";
+        a[24]="714 bb cd caaaaaad cd bb 319";
+        a[25]="715 fe bb faadcaae bb fe 619";
+        a[26]="2      bb    bb    bb      2";
+        a[27]="2tcaaaaefaad bb caaefaaaadt2";
+        a[28]="2 faaaaaaaae fe faaaaaaaae 2";
+        a[29]="2                          2";
+        a[30]="6111111111111111111111111115";
+    }
 
     //Interpretação dos Códigos e impressão do Mapa
     for(i=0; i<31; i++)
@@ -315,7 +309,7 @@ void main(int nivel)
             //Atribuição das barreiras no mapa
             if(i==13 && (j==14 || j==15)) barra[i][j]=2;
             else if(matriz[i][j]!=250 && matriz[i][j]!=' '&& matriz[i][j]!=248) barra[i][j]=1;
-            if(matriz[i][j]==250)contcomida++;
+            if(matriz[i][j]==250||matriz==248)contcomida++;
         }
         putchar('\n');
     }
@@ -329,10 +323,7 @@ void main(int nivel)
             {
                 auxy[i]=fant[i].y;
                 aux[i]=fant[i].x;
-                //printf("\n%d %d\n%d %d",auxy[i],fant[i].y,aux[i],fant[i].x);
-                //Sleep(3000);
                 dirrand(&fant[i].x, &fant[i].y,pm.x, pm.y);
-                barreirafant(&fant[i].x,&fant[i].y,aux[i],auxy[i],barra);
                 if(fant[i].x==pm.x && fant[i].y==pm.y)
                 {
                     if(especial==1)
@@ -349,8 +340,7 @@ void main(int nivel)
         aux[3]=pm.x;
         if(pis%3==0)
         {
-            direcao(&pm.x, &pm.y,barra);
-            barreira(&pm.x,&pm.y,aux[3],auxy[3],barra);
+            direcao(&pm.x, &pm.y);
         }
         //printf("Pontuacao: %d\n", ponto);
         for(i=0; i<31; i++)
@@ -372,7 +362,8 @@ void main(int nivel)
 
                     //if(trocarface>2){ putchar('C');trocarface++;}
                     gotoxy(pm.y,pm.x);
-                    putchar('O');
+                    if(pis%10==0) putchar('O');
+                    else if(pis%10!=0) putchar('C');
                     if(pm.y!=auxy[3] || pm.x!=aux[3])
                     {
                         gotoxy(auxy[3],aux[3]);
@@ -383,7 +374,8 @@ void main(int nivel)
                 else if( matriz[i][j]==' ' && i==pm.x && j==pm.y)
                 {
                     gotoxy(pm.y,pm.x);
-                    putchar('O');
+                    if(pis%10==0) putchar('O');
+                    else if(pis%10!=0) putchar('C');
                     if(pm.y!=auxy[3] || pm.x!=aux[3])
                     {
                         gotoxy(auxy[3],aux[3]);
