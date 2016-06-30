@@ -516,11 +516,11 @@ void jogo(int estagio)
     fflush(stdin);
     while(1)
     {
-        if(pis%(especial==1?18:(18-estagio))==0)
-        {
+
             for(i=0; i<4; i++)
             {   if(especial[i])mudacor(1);
                 else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(12):i==3?mudacor(6):0;
+                if(pis%(especial[i]==1?20:(20-estagio))==0){
                 auxy[i]=fant[i].y;
                 aux[i]=fant[i].x;
                 dirrand(&fant[i].x, &fant[i].y,pm.x, pm.y);
@@ -548,7 +548,7 @@ void jogo(int estagio)
         }
         auxy[4]=pm.y;
         aux[4]=pm.x;
-        if(pis%17==0)
+        if(pis%19==0)
         {
             direcao(&pm.x, &pm.y);
              if( (matriz[pm.x][pm.y]==250||matriz[pm.x][pm.y]==248))
@@ -562,13 +562,12 @@ void jogo(int estagio)
                     }
                     else ponto++;
                     matriz[pm.x][pm.y]=' ';
-
+                    mudacor(14);
                     if(trocarface>2){ putchar('C');trocarface++;}
                     gotoxy(pm.y,pm.x);
-                    if(pis%10==0)
-                        {
+                    if(pis%10==0){
                             putchar('O');}
-                    else if(pis%10!=0) putchar('C');
+                    else if(pis%10!=0){ putchar('C');}
                     if(pm.y!=auxy[4] || pm.x!=aux[4])
                     {
                         gotoxy(auxy[4],aux[4]);
@@ -577,7 +576,7 @@ void jogo(int estagio)
 
                 }
                 else if( matriz[pm.x][pm.y]==' ')
-                {
+                {   mudacor(14);
                     gotoxy(pm.y,pm.x);
                     if(pis%40<20) putchar('O');
                     else putchar('C');
