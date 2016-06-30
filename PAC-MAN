@@ -494,7 +494,7 @@ void GAMEOVER(int ponto)
 }
 void jogo(int estagio)
 {
-    int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial=0;
+    int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial[4]={0,0,0,0};
     int contcomida=0,duracaoesp,trocarface;
     coord pm, fant[4];
     system("cls");
@@ -519,7 +519,7 @@ void jogo(int estagio)
         if(pis%(especial==1?18:(18-estagio))==0)
         {
             for(i=0; i<4; i++)
-            {   if(especial)mudacor(1);
+            {   if(especial[i])mudacor(1);
                 else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(12):i==3?mudacor(6):0;
                 auxy[i]=fant[i].y;
                 aux[i]=fant[i].x;
@@ -535,11 +535,12 @@ void jogo(int estagio)
 
                 if(fant[i].x==pm.x && fant[i].y==pm.y)
                 {
-                    if(especial==1)
+                    if(especial[i]==1)
                     {
                         ponto+=100;
                         fant[i].x=14;
                         fant[i].y=14;
+                        especial[i]=0;
                     }
                    else GAMEOVER(ponto);
                 }
@@ -547,7 +548,7 @@ void jogo(int estagio)
         }
         auxy[4]=pm.y;
         aux[4]=pm.x;
-        if(pis%18==0)
+        if(pis%17==0)
         {
             direcao(&pm.x, &pm.y);
              if( (matriz[pm.x][pm.y]==250||matriz[pm.x][pm.y]==248))
@@ -555,8 +556,8 @@ void jogo(int estagio)
                     contcomida--;
                     if(contcomida==0)jogo(estagio+=1);
                     if(matriz[pm.x][pm.y]==248)
-                    {
-                        especial=1;
+                    {   for(i=0;i<4;i++)
+                        especial[i]=1;
                         duracaoesp=0;
                     }
                     else ponto++;
@@ -589,11 +590,12 @@ void jogo(int estagio)
               for(i=0; i<4; i++)  {
                 if(fant[i].x==pm.x && fant[i].y==pm.y)
                 {
-                    if(especial==1)
+                    if(especial[i]==1)
                     {
                         ponto+=100;
                         fant[i].x=14;
                         fant[i].y=14;
+                        especial[i]=0;
                     }
                    else GAMEOVER(ponto);
                 }
@@ -603,7 +605,9 @@ void jogo(int estagio)
         Sleep(10);
         pis++;
         duracaoesp++;
-        if(duracaoesp==750 && especial==1)especial=0;
+        if(duracaoesp==750){
+                for(i=0;i<4;i++)
+                especial[i]=0;}
         if(trocarface>4)trocarface=0;
     }
 }
