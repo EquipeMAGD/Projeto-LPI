@@ -5,22 +5,28 @@
 #include <dos.h>
 
 int estagio=0, matriz[31][28], barra[31][28];
+
 //center of axis is set to the top left cornor of the screen
 COORD coordi= {0,0};
 typedef struct coord
 {
     int x, y;
 } coord;
-int mapa()
+void mudacor(int i)
 {
-   //Desenho do Mapa
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
+
+}
+
+int mapa()
+{   //Desenho do Mapa
    int i, j,contcomida=0;
    //matriz e ponteiro para desenho do mapa
     char b[31][29],*a[31];
    //Cada ponteiro de 'a' apontando para uma linha de 'b'
         for(i=0; i<31; i++)
             a[i]=b[i];
-
+    if (estagio%3==0){
         a[0] ="311111111111MAGD111111111114";
         a[1] ="2            bb            2";
         a[2] ="2 caad caaad bb caaad caad 2";
@@ -52,6 +58,74 @@ int mapa()
         a[28]="2 faaaaaaaae fe faaaaaaaae 2";
         a[29]="2                          2";
         a[30]="6111111111111111111111111115";
+    }
+    else if(estagio%3==1){
+        a[0] ="311111111111MAGD111111111114";
+        a[1] ="2t                        t2";
+        a[2] ="2 caaaaaaaaaa  aaaaaaaaaad 2";
+        a[3] ="2 b                      b 2";
+        a[4] ="2 b caaaaaaaaaaaaaaaaaad b 2";
+        a[5] ="2 b b                  b b 2";
+        a[6] ="2 b b caaaaad  caaaaad b b 2";
+        a[7] ="2 b b bcaaadb  bcaaadb b b 2";
+        a[8] ="2 b b bb   fe  fe   bb b b 2";
+        a[9] ="2 b   bb cd      cd bb   b 2";
+        a[10]="2 b b bb bb caad bb bb b b 2";
+        a[11]="2 b b bb fe faae fe bb b b 2";
+        a[12]="2 b b bb 0000000000 bb b b 2";
+        a[13]="2   b bb 0311aa1140 bb b   2";
+        a[14]="61115 fe 0200000020 fe 61115";
+        a[15]="0        0611111150        0";
+        a[16]="31114 cd 0000000000 cd 31114";
+        a[17]="2   b bb cd      cd bb b   2";
+        a[18]="2 b b bb bb caad bb bb b b 2";
+        a[19]="2 b b bb bb b00b bb bb b b 2";
+        a[20]="2 b b bb fe faae fe bb b b 2";
+        a[21]="2 b b bb            bb b b 2";
+        a[22]="2 b   bb   cd  cd   bb   b 2";
+        a[23]="2 b b bfaaaeb  bfaaaeb b b 2";
+        a[24]="2 b b faaaaae  faaaaae b b 2";
+        a[25]="2 b b                  b b 2";
+        a[26]="2 b faaaaaaaaaaaaaaaaaae b 2";
+        a[27]="2 b                      b 2";
+        a[28]="2 faaaaaaaaaa  aaaaaaaaaae 2";
+        a[29]="2t                        t2";
+        a[30]="6111111111111111111111111115";
+    }
+//mapa MAGD
+        else if(estagio%3==2){
+        a[0] ="311111111111MAGD111111111114";
+        a[1] ="2                          2";
+        a[2] ="2 ca ad              ca ad 2";
+        a[3] ="2 b   fd   caaaad   ce   b 2";
+        a[4] ="2 b    fd ce    fd ce    b 2";
+        a[5] ="2 b     fae      fae     b 2";
+        a[6] ="2 b                      b 2";
+        a[7] ="2 faaaaaaaaaa  aaaaaaaaaae 2";
+        a[8] ="2                          2";
+        a[9] ="2 caaa aaaaaaaaaaaaaa aaad 2";
+        a[10]="2 b                      b 2";
+        a[11]="2 b   caaaaaa  aaaaaad   b 2";
+        a[12]="2 b   b              b   b=2";
+        a[13]="2 b   fd 0311aa1140 ce   b 2";
+        a[14]="0 b   ce 0200000020 fd   b 0";
+        a[15]="2 b   b  0611111150  b   b 2";
+        a[16]="2 fa                    ae 2";
+        a[17]="2    aaaaaaaaa aaaaaaaa    2";
+        a[18]="2 b                      b 2";
+        a[19]="2 b  caaaaaaaaaaaaaaad   b 2";
+        a[20]="2 b  faaaaaaad       b   b 2";
+        a[21]="2 b          b           b 2";
+        a[22]="2 faaaaa aaaae       faaae 2";
+        a[23]="2                          2";
+        a[24]="2    caaaaaaa  aaaaaaad    2";
+        a[25]="2  cae                fad  2";
+        a[26]="2 ce       caaaad       fd 2";
+        a[27]="2tb        faaaae        bt2";
+        a[28]="2 faaaaaaa aaaaaa aaaaaaae 2";
+        a[29]="2                          2";
+        a[30]="6111111111111111111111111115";
+       }
 
 
     //Interpretação dos Códigos e impressão do Mapa
@@ -137,51 +211,36 @@ int mapa()
                 break;
             }
             //Mapa sendo impresso
-            putchar(matriz[i][j]);
+
 
             //Atribuição das barreiras no mapa
-            if(i==13 && (j==14 || j==15)) barra[i][j]=2;
-            else if(i==14 &&(j==0 || j==27)) barra[i][j]=3;
-            else if(matriz[i][j]!=250 && matriz[i][j]!=' '&& matriz[i][j]!=248) barra[i][j]=1;
-            if(matriz[i][j]==250||matriz==248)contcomida++;
+            if(i==13 && (j==14 || j==13)){
+            mudacor(7);
+            putchar(matriz[i][j]);barra[i][j]=2;}
+            else if(matriz[i][j]!=250 && matriz[i][j]!=' '&& matriz[i][j]!=248)
+                { mudacor(9);
+                  putchar(matriz[i][j]);
+                    barra[i][j]=1;}
+            else if(j==27||j==0)
+            {
+             mudacor(14);
+             putchar(matriz[i][j]);
+              barra[i][j]=3;}
+            else{
+            mudacor(14);
+            putchar(matriz[i][j]);}
+            if(matriz[i][j]==250||matriz==248){
+            mudacor(14);
+            contcomida++;
+            //putchar(matriz[i][j]);
+            }
+            //printf("%d",barra[i][j]);
+            //Sleep(20);
         }
         putchar('\n');
+
     }
     return contcomida;
-}
-void titulo(void)
-{
-    static int anim_menu=0;
-    anim_menu++;
-    printf("   _______                              __       __\n"
-           "  |       \\                            |  \\     /  \\\n"
-           "  | $$$$$$$\\ ______    _______         | $$\\   /  $$  ______   _______\n"
-           "  | $$__/ $$|      \\  /       \\ ______ | $$$\\ /  $$$ |      \\ |       \\       \n"
-           "  | $$    $$ \\$$$$$$\\|  $$$$$$$|      \\| $$$$\\  $$$$  \\$$$$$$\\| $$$$$$$\\\n"
-           "  | $$$$$$$ /      $$| $$       \\$$$$$$| $$\\$$ $$ $$ /      $$| $$  | $$\n"
-           "  | $$     |  $$$$$$$| $$_____         | $$ \\$$$| $$|  $$$$$$$| $$  | $$ \n"
-           "  | $$      \\$$    $$ \\$$     \\        | $$  \\$ | $$ \\$$    $$| $$  | $$\n"
-           "   \\$$       \\$$$$$$$  \\$$$$$$$         \\$$      \\$$  \\$$$$$$$ \\$$   \\$$\n\n");
-    if(anim_menu%2==0)
-    {
-        printf("\t\t\t   ____\n"
-               "\t\t\t  /    \\\n"
-               "\t\t\t /     /\n"
-               "\t\t\t |    /\n"
-               "\t\t\t |    \\()  ()  ()  ()  ()  ()\n"
-               "\t\t\t \\     \\\n"
-               "\t\t\t  \\____/\n\n");
-    }
-    else
-    {
-        printf("\t\t\t   ____\n"
-               "\t\t\t  /    \\\n"
-               "\t\t\t /      \\\n"
-               "\t\t\t |   ___|\n"
-               "\t\t\t |      | ()  ()  ()  ()  ()  ()\n"
-               "\t\t\t \\      /\n"
-               "\t\t\t  \\____/\n\n");
-    }
 }
 void movanima1(int anim)
 {
@@ -196,6 +255,20 @@ void movanima2(int distanc)
     int i;
 for(i=0;i<=distanc;i++)putchar(' ');
 }
+void ajuda(){
+    printf("\n\n\t\t\t\t INICIANDO O JOGO:\n\n"
+           "\t\t\tPARA INICIAR ESCOLHA A PRIMEIRA OPCAO NO MENU!\n\n"
+           "\t\t\t\t PRIMEIRO PASSOS NO JOGO:\n\n"
+           "\t\t\t\tUSE AS TECLAS DIRECIONAIS:\n"
+           "\t\t\t\t-->\"w\" PARA SE MOVER PRA CIMA."
+           "\n\t\t\t\t-->\"a\" PARA SE MOVER PRA ESQUERDA."
+           "\n\t\t\t\t-->\"s\" PARA SE MOVER PRA BAIXO."
+           "\n\t\t\t\t-->\"d\" PARA SE MOVER PRA DIREITA.\n");
+    printf("\t\tpara consultar a pontuacao, escolha a opcao de numero 2 no menu\n\t\tpara sair, escolha a opcao de numero 4 no menu\n");
+    printf("\t\t\pressione qualquer tecla para continuar...");
+    getch();
+    menu();
+}
 void titulo1(void)
 {
     static int anim_menu1=0,anim=0;
@@ -204,16 +277,18 @@ void titulo1(void)
     if(anim==17)anim=0;
     if (anim_menu1==3 || anim_menu1==6)anim++;
     if(anim_menu1<=3)//controle de velocidade da animação
-    {
-        printf("   _______                              __       __\n"
-               "  |       \\                            |  \\     /  \\\n"
-               "  | $$$$$$$\\ ______    _______         | $$\\   /  $$  ______   _______\n"
-               "  | $$__/ $$|      \\  /       \\ ______ | $$$\\ /  $$$ |      \\ |       \\       \n"
-               "  | $$    $$ \\$$$$$$\\|  $$$$$$$|      \\| $$$$\\  $$$$  \\$$$$$$\\| $$$$$$$\\\n"
-               "  | $$$$$$$ /      $$| $$       \\$$$$$$| $$\\$$ $$ $$ /      $$| $$  | $$\n"
-               "  | $$     |  $$$$$$$| $$_____         | $$ \\$$$| $$|  $$$$$$$| $$  | $$ \n"
-               "  | $$      \\$$    $$ \\$$     \\        | $$  \\$ | $$ \\$$    $$| $$  | $$\n"
-               "   \\$$       \\$$$$$$$  \\$$$$$$$         \\$$      \\$$  \\$$$$$$$ \\$$   \\$$\n\n");
+    {   mudacor(9+anim_menu1);
+        printf("     _______                              __       __\n"
+               "    |       \\                            |  \\     /  \\\n"
+               "    | $$$$$$$\\ ______    _______         | $$\\   /  $$  ______   _______\n"
+               "    | $$__/ $$|      \\  /       \\ ______ | $$$\\ /  $$$ |      \\ |       \\      \n"
+               "    | $$    $$ \\$$$$$$\\|  $$$$$$$|      \\| $$$$\\  $$$$  \\$$$$$$\\| $$$$$$$\\\n"
+               "    | $$$$$$$ /      $$| $$       \\$$$$$$| $$\\$$ $$ $$ /      $$| $$  | $$\n"
+               "    | $$     |  $$$$$$$| $$_____         | $$ \\$$$| $$|  $$$$$$$| $$  | $$ \n"
+               "    | $$      \\$$    $$ \\$$     \\        | $$  \\$ | $$ \\$$    $$| $$  | $$\n"
+               "     \\$$       \\$$$$$$$  \\$$$$$$$         \\$$      \\$$  \\$$$$$$$ \\$$   \\$$\n\n");
+
+        mudacor(14);
         if(anim>13){
         movanima1(anim);
         printf("    ____");movanima2(distanc);printf("       \n");
@@ -242,18 +317,19 @@ void titulo1(void)
 
     }}
     if (anim_menu1>3)//controle de velocidade da animação
-    {
-        printf("   _______                             __       __\n"
-               "  /       \\                           /  \\     /  |\n"
-               "  $$$$$$$  | ______    _______        $$  \\   /$$ |  ______   _______\n"
-               "  $$ |__$$ |/      \\  /       |______ $$$  \\ /$$$ | /      \\ /       \\\n"
-               "  $$    $$/ $$$$$$  |/$$$$$$$//      |$$$$  /$$$$ | $$$$$$  |$$$$$$$  |\n"
-               "  $$$$$$$/  /    $$ |$$ |     $$$$$$/ $$ $$ $$/$$ | /    $$ |$$ |  $$ |\n"
-               "  $$ |     /$$$$$$$ |$$ \\_____        $$ |$$$/ $$ |/$$$$$$$ |$$ |  $$ |\n"
-               "  $$ |     $$    $$ |$$       |       $$ | $/  $$ |$$    $$ |$$ |  $$ |\n"
-               "  $$/       $$$$$$$/  $$$$$$$/        $$/      $$/  $$$$$$$/ $$/   $$/\n\n");
-
+    { mudacor(9+anim_menu1);
+        printf("     _______                             __       __\n"
+               "    /       \\                           /  \\     /  |\n"
+               "    $$$$$$$  | ______    _______        $$  \\   /$$ |  ______   _______\n"
+               "    $$ |__$$ |/      \\  /       |______ $$$  \\ /$$$ | /      \\ /       \\\n"
+               "    $$    $$/ $$$$$$  |/$$$$$$$//      |$$$$  /$$$$ | $$$$$$  |$$$$$$$  |\n"
+               "    $$$$$$$/  /    $$ |$$ |     $$$$$$/ $$ $$ $$/$$ | /    $$ |$$ |  $$ |\n"
+               "    $$ |     /$$$$$$$ |$$ \\_____        $$ |$$$/ $$ |/$$$$$$$ |$$ |  $$ |\n"
+               "    $$ |     $$    $$ |$$       |       $$ | $/  $$ |$$    $$ |$$ |  $$ |\n"
+               "    $$/       $$$$$$$/  $$$$$$$/        $$/      $$/  $$$$$$$/ $$/   $$/\n\n");
+        mudacor(14);
         if(anim>13){
+
         movanima1(anim);
         printf("   ____ ");movanima2(distanc);printf("       \n");
         movanima1(anim);
@@ -434,17 +510,17 @@ void jogo(int estagio)
         auxy[i]=fant[i].y;
     }
     contcomida=mapa();
-    gotoxy(14, 16); putchar('O');
-    gotoxy(fant[0].x, fant[0].y); putchar(182);
-getch();
+    gotoxy(14, 16);mudacor(14); putchar('O');
+    gotoxy(fant[0].x, fant[0].y);mudacor(12); putchar(182);
+    getch();
     fflush(stdin);
     while(1)
     {
-        //system("cls");
         if(pis%(especial==1?18:(18-estagio))==0)
         {
             for(i=0; i<4; i++)
-            {
+            {   if(especial)mudacor(1);
+                else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(12):i==3?mudacor(6):0;
                 auxy[i]=fant[i].y;
                 aux[i]=fant[i].x;
                 dirrand(&fant[i].x, &fant[i].y,pm.x, pm.y);
@@ -453,6 +529,7 @@ getch();
                     if(fant[i].y!=auxy[i] || fant[i].x!=aux[i])
                     {
                         gotoxy(auxy[i],aux[i]);
+                        mudacor(14);
                         printf("%c",matriz[aux[i]][auxy[i]]);
                     }
 
@@ -487,7 +564,9 @@ getch();
 
                     if(trocarface>2){ putchar('C');trocarface++;}
                     gotoxy(pm.y,pm.x);
-                    if(pis%10==0) putchar('O');
+                    if(pis%10==0)
+                        {
+                            putchar('O');}
                     else if(pis%10!=0) putchar('C');
                     if(pm.y!=auxy[4] || pm.x!=aux[4])
                     {
@@ -507,8 +586,20 @@ getch();
                         putchar(' ');
                     }
                 }
+              for(i=0; i<4; i++)  {
+                if(fant[i].x==pm.x && fant[i].y==pm.y)
+                {
+                    if(especial==1)
+                    {
+                        ponto+=100;
+                        fant[i].x=14;
+                        fant[i].y=14;
+                    }
+                   else GAMEOVER(ponto);
+                }
+              }
         }
-          
+
         Sleep(10);
         pis++;
         duracaoesp++;
@@ -524,10 +615,11 @@ void menu()
     {
         system("cls");
         titulo1();
-        printf("\n\n\t\t\t%c Jogar\n"
-               "\t\t\t%c Pontuacoes\n"
-               "\t\t\t%c Ajuda\n"
-               "\t\t\t%c Sair\n",ast[0], ast[1], ast[2],ast[3] );
+        mudacor(15);
+        printf("\n\n\t\t\t\t%c Jogar\n"
+               "\t\t\t\t%c Pontuacoes\n"
+               "\t\t\t\t%c Ajuda\n"
+               "\t\t\t\t%c Sair\n",ast[0], ast[1], ast[2],ast[3] );
         fflush(stdin);
         if(kbhit())
         {
@@ -548,7 +640,10 @@ void menu()
             {
                 if(n==0) jogo(estagio);
                 //else if(n==1)
-                //else if(n==2)
+                else if(n==2){
+                    system("cls");
+                    ajuda();
+                }
                 else if(n==3)
                 {
                     system("cls");
