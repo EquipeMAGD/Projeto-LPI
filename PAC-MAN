@@ -5,21 +5,17 @@
 #include <dos.h>
 
 int estagio=0, matriz[31][28], barra[31][28];
-
 //center of axis is set to the top left cornor of the screen
 COORD coordi= {0,0};
-typedef struct coord
-{
+typedef struct coord{
     int x, y;
 } coord;
-void mudacor(int i)
-{
+void mudacor(int i){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
 
 }
-
-int mapa()
-{   //Desenho do Mapa
+int mapa(){
+       //Desenho do Mapa
    int i, j,contcomida=0;
    //matriz e ponteiro para desenho do mapa
     char b[31][29],*a[31];
@@ -242,16 +238,14 @@ int mapa()
     }
     return contcomida;
 }
-void movanima1(int anim)
-{
+void movanima1(int anim){
     int i,j=4,sub=14;
     if (anim>13){
     for(i=0;i<=(anim-sub)*j;i++)putchar(' ');}
   else{
     for(i=0;i<=anim*j;i++)putchar(' ');}
 }
-void movanima2(int distanc)
-{
+void movanima2(int distanc){
     int i;
 for(i=0;i<=distanc;i++)putchar(' ');
 }
@@ -269,8 +263,7 @@ void ajuda(){
     getch();
     menu();
 }
-void titulo1(void)
-{
+void titulo1(void){
     static int anim_menu1=0,anim=0;
     int i,K,distanc=48;
     anim_menu1++;
@@ -359,14 +352,12 @@ void titulo1(void)
 
     }
 }
-void gotoxy(int x,int y)
-{
+void gotoxy(int x,int y){
     coordi.X=x;
     coordi.Y=y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordi);
 }
-void movimento(int c,int *x,int *y)
-{
+void movimento(int c,int *x,int *y){
      switch(c)
         {
         case 'w':
@@ -382,8 +373,7 @@ void movimento(int c,int *x,int *y)
             *y+=1;
             break;}
 }
-void direcao(int *x, int *y)
-{
+void direcao(int *x, int *y){
     static char c, c2, f,ldpause;
     int antgx=*x, antgy=*y;
 
@@ -416,8 +406,7 @@ void direcao(int *x, int *y)
         *y=antgy;
     }
 }
-void dirrand(int *x, int *y,int xpac,int ypac)
-{
+void dirrand(int *x, int *y,int xpac,int ypac){
     int n, antgx=*x, antgy=*y;
     static int cont=0;
 
@@ -467,8 +456,7 @@ void dirrand(int *x, int *y,int xpac,int ypac)
     }
     while(barra[*x][*y]==1||barra[*x][*y]==3);
 }
-void GAMEOVER(int ponto)
-{
+void GAMEOVER(int ponto){
     char nome[20];
     char rp;
 
@@ -492,8 +480,7 @@ void GAMEOVER(int ponto)
     getch();
     menu();
 }
-void jogo(int estagio)
-{
+void jogo(int estagio){
     int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial[4]={0,0,0,0};
     int contcomida=0,duracaoesp,trocarface;
     coord pm, fant[4];
@@ -549,7 +536,8 @@ void jogo(int estagio)
         auxy[4]=pm.y;
         aux[4]=pm.x;
         if(pis%19==0)
-        {
+        {   gotoxy(55,15);mudacor(15);
+            printf("%d",ponto);
             direcao(&pm.x, &pm.y);
              if( (matriz[pm.x][pm.y]==250||matriz[pm.x][pm.y]==248))
                 {
@@ -610,8 +598,7 @@ void jogo(int estagio)
         if(trocarface>4)trocarface=0;
     }
 }
-void menu()
-{
+void menu(){
     char ast[4]={'>',' ',' '}, dir;
     int n=0;
     while(1)
@@ -619,13 +606,14 @@ void menu()
         system("cls");
         titulo1();
         mudacor(15);
+
         printf("\n\n\t\t\t\t%c Jogar\n"
                "\t\t\t\t%c Pontuacoes\n"
                "\t\t\t\t%c Ajuda\n"
                "\t\t\t\t%c Sair\n",ast[0], ast[1], ast[2],ast[3] );
         fflush(stdin);
         if(kbhit())
-        {
+        {Beep(700,50);
             dir=getch();
             if(dir=='w' && n!=0)
             {
@@ -640,7 +628,7 @@ void menu()
                 ast[n]='>';
             }
             else if(dir=='\n'||dir=='\r')
-            {
+            {   putchar ('\7');
                 if(n==0) jogo(estagio);
                 //else if(n==1)
                 else if(n==2){
@@ -657,7 +645,6 @@ void menu()
         Sleep(100);
     }
 }
-void main ()
-{
+void main (){
     menu();
 }
