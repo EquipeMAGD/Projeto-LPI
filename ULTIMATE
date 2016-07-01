@@ -391,17 +391,13 @@ void direcao(int *x, int *y){
         c=getch();
         f=1;
     }
-
        movimento(c,x,y);
-
-
 
     if ((barra[*x][*y]==1 || barra[*x][*y]==2)&& f==1)
     {
         *x=antgx;
         *y=antgy;
         movimento(c2,x,y);
-
     }
     else f=0;
     if(*y>=27) *y=0;
@@ -505,7 +501,7 @@ void ranking(void)
 
 void arquivos(int ponto)
 {
-    struct dado player[10];
+    struct dado player[10]; player[0].score=0;
     struct dado tempor1, tempor2;
     struct dado novo;
     int i,j, pontos[10][10], NumLin=0;
@@ -544,6 +540,11 @@ void arquivos(int ponto)
     //ORGANIZANDO EM ORDEM
     for(i=NumLin; i>=0; i--)
     {
+        if(player[0].score==0)
+        {
+            player[0].score=novo.score;
+            strcpy(player[0].name,novo.name);
+        }
         if(novo.score<=player[i].score)
         {
             //TROCANDO AS POSIÇÕES
