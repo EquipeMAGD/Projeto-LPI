@@ -231,9 +231,9 @@ int mapa(){
             else{
             mudacor(14);
             putchar(matriz[i][j]);}
-            if(matriz[i][j]==250||matriz==248){
+            if(matriz[i][j]==250||matriz[i][j]==248){
             mudacor(14);
-            contcomida++;
+            contcomida=5;
             //putchar(matriz[i][j]);
             }
             //printf("%d",barra[i][j]);
@@ -309,8 +309,8 @@ void titulo1(void){
          movanima1(anim);printf(" ______""       ""  /    \\\n");
          movanima1(anim);printf("/      \\""      "" /     /\n");
          movanima1(anim);printf("|  ()()|""      "" |    /\n");// for(i=0;i<anim;i++) // printf(" () "); // putchar(' ');
-         for(K=anim*2;K>(anim);K--)printf(" O  ");putchar(' ');printf("|      |""      "" |    \\"); // for(i=12;i>anim;i--) // printf(" () ");
-         for(i=13;i>anim;i--)printf(" O  ");printf("  ");putchar('\n');
+         for(K=anim*2;K>(anim);K--)printf(" O  ");printf(" ");printf("|      |""      "" |    \\"); // for(i=12;i>anim;i--) // printf(" () ");
+         for(i=13;i>anim;i--)printf(" O  ");printf(" O");putchar('\n');
          movanima1(anim);printf("|      |""      "" \\     \\\n");
          movanima1(anim);printf("|/\\/\\/\\|""      ""  \\____/\n\n");
 
@@ -601,9 +601,9 @@ void GAMEOVER(int ponto){
     getch();
     menu();
 }
-void jogo(int estagio){
+void jogo(int vida){
     int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial[4]={0,0,0,0};
-    int contcomida=0,duracaoesp,trocarface, vida=3;
+    int contcomida=0,duracaoesp,trocarface;
     coord pm, fant[4];
     system("cls");
 
@@ -690,7 +690,7 @@ void jogo(int estagio){
              if( (matriz[pm.x][pm.y]==250||matriz[pm.x][pm.y]==248))
                 {
                     contcomida--;
-                    if(contcomida==0)jogo(estagio+=1);
+                    if(contcomida==0){estagio+=1;jogo(vida);}
                     if(matriz[pm.x][pm.y]==248)
                     {   for(i=0;i<4;i++)
                         especial[i]=1;
@@ -802,7 +802,8 @@ void menu(){
                     if(kbhit())
                     {
                       gets(nome);
-                      jogo(estagio);
+
+                      jogo(3);
                     } Sleep(100);
                     }
                 }
