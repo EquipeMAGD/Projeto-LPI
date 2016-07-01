@@ -595,7 +595,7 @@ void GAMEOVER(int ponto){
 }
 void jogo(int estagio){
     int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial[4]={0,0,0,0};
-    int contcomida=0,duracaoesp,trocarface;
+    int contcomida=0,duracaoesp,trocarface, vida=3;
     coord pm, fant[4];
     system("cls");
 
@@ -642,15 +642,29 @@ void jogo(int estagio){
                         fant[i].y=14;
                         especial[i]=0;
                     }
-                   else GAMEOVER(ponto);
+                    else if(vida!=0)
+                    {
+                        vida--;
+                        pm.x=16;
+                        pm.y=14;
+                    }
+                    else GAMEOVER(ponto);
                 }
             }
         }
         auxy[4]=pm.y;
         aux[4]=pm.x;
         if(pis%19==0)
-        {   gotoxy(55,15);mudacor(15);
+        {
+            //Informações adicionais na tela
+            for(i=vida;i>=0;i--){
+            gotoxy(3+i,31);mudacor(12);
+            printf("%c",3);}
+            gotoxy(9,31);mudacor(15);
+            printf("%s - ",nome);
+            gotoxy(15,31);mudacor(15);
             printf("%d",ponto);
+
             direcao(&pm.x, &pm.y);
              if( (matriz[pm.x][pm.y]==250||matriz[pm.x][pm.y]==248))
                 {
@@ -696,6 +710,12 @@ void jogo(int estagio){
                         fant[i].x=14;
                         fant[i].y=14;
                         especial[i]=0;
+                    }
+                   else if(vida!=1)
+                    {
+                        vida--;
+                        pm.x=16;
+                        pm.y=14;
                     }
                    else GAMEOVER(ponto);
                 }
