@@ -463,16 +463,23 @@ void dirrand(int *x, int *y,int xpac,int ypac){
 void ranking(void)
 {
     struct dado player[10];
-    int i, j, ajuste=0, NumLin=0;
+    int aux=10, i, j, ajuste=0, NumLin=0;
     char c, control[15];
     FILE *arq;
     arq = fopen("ranking.txt","r");
-    if(arq!=NULL){ajuste++;}
+    if(arq==NULL)
+        {
+            system("cls");
+            printf("\n\n\t\t  NOME\t\t\t\t\tSCORE\n\n");
+            while(aux>0){ printf("\t\t  --- . . . . . . . . . . . . . . . . . ---\n\n"); aux--;}
+            printf("\n\n\t\tPressione qualquer tecla para voltar ao menu...");
+            getch(); menu();
+        }
     while((c=fgetc(arq))!=EOF){if(c=='\n' || c=='\r')NumLin++;}
     fclose(arq);
      //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
     fopen("ranking.txt","r");
-    for(i=0; i<=NumLin || i==0; i++)
+    for(i=0; i<NumLin || i==0; i++)
     {
         for(j=0; j<2; j++)
         {
@@ -491,10 +498,12 @@ void ranking(void)
     }
     fclose(arq);
     //IMPRIMINDO OS JOGADORES
-    printf("NOME\t\tSCORE\n");
-    for(i=0; i<=NumLin-ajuste;i++)
+    if(NumLin==0){ajuste++;}
+     system("cls");
+     printf("\n\n\t\t  NOME\t\t\t\t\tSCORE\n\n");
+    for(i=0; i<NumLin+ajuste;i++)
     {
-        printf("%d. %s\t--\t%i\n", i+1, player[i].name, player[i].score);
+        printf("\t      %d.  %s . . . . . . . . . . . . . . . . . %i\n\n", i+1, player[i].name, player[i].score); aux--;
     }
     printf("\nPressione qualquer tecla para voltar ao menu...");
     fflush(stdin);
@@ -553,12 +562,12 @@ void arquivos(int ponto)
         if(novo.score<=player[i].score)
         {
             //TROCANDO AS POSIÇÕES
-            tempor2.score=novo.score; strcpy(tempor2.name,novo.name);
-        for(j=i+1; j<NumLin; j++)
+            tempor2.score=novo.score;      strcpy(tempor2.name,novo.name);
+        for(j=i+1; j<=NumLin; j++)
         {
             tempor1.score=player[j].score; strcpy(tempor1.name,player[j].name);
             player[j].score=tempor2.score; strcpy(player[j].name,tempor2.name);
-            tempor2.score=tempor1.score;     strcpy(tempor2.name,tempor1.name);
+            tempor2.score=tempor1.score;   strcpy(tempor2.name,tempor1.name);
         }
             break;
         }
@@ -777,12 +786,7 @@ void menu(){
                 }
                 else if(n==1)
                 {
-                    while(1)
-                    {
-                        system("cls"); titulo1(); mudacor(15);
-                        ranking();
-                        Sleep(100);
-                    }
+                ranking();
                 }
                 else if(n==2){
                     system("cls");
