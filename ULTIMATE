@@ -4,7 +4,7 @@
 #include <conio.h>
 #include <dos.h>
 
-int estagio=2, matriz[31][28], barra[31][28];
+int estagio=0, matriz[31][28], barra[31][28];
 char nome[7];
 //center of axis is set to the top left cornor of the screen
 COORD coordi= {0,0};
@@ -505,9 +505,8 @@ void ranking(void)
     {
         printf("\t      %d.  %s . . . . . . . . . . . . . . . . . %i\n\n", i+1, player[i].name, player[i].score); aux--;
     }
-    printf("\nPressione qualquer tecla para voltar ao menu...");
-    fflush(stdin);
-    if(kbhit())menu();
+    printf("\n\t\tPressione qualquer tecla para voltar ao menu...");
+    getch();menu();
 }
 
 void arquivos(int ponto)
@@ -656,6 +655,15 @@ void jogo(int estagio){
                         vida--;
                         pm.x=16;
                         pm.y=14;
+                        for(j=0; j<4; j++)
+                        {
+
+                            aux[j]=fant[j].x;
+                            auxy[j]=fant[j].y;
+                            fant[j].x=14;
+                            fant[j].y=14;
+                            gotoxy(auxy[j],aux[j]); putchar(matriz[aux[j]][auxy[j]]);
+                        }
                     }
                     else GAMEOVER(ponto);
                 }
@@ -666,7 +674,11 @@ void jogo(int estagio){
         if(pis%19==0)
         {
             //Informações adicionais na tela
-            for(i=vida;i>=0;i--){
+            for(i=3; i>vida; i--)
+            {
+                gotoxy(3+i, 31); putchar(' ');
+            }
+            for(i=vida;i>0;i--){
             gotoxy(3+i,31);mudacor(12);
             printf("%c",3);}
             gotoxy(9,31);mudacor(15);
@@ -720,11 +732,21 @@ void jogo(int estagio){
                         fant[i].y=14;
                         especial[i]=0;
                     }
-                   else if(vida!=1)
+                   else if(vida!=0)
                     {
                         vida--;
+                       // gotoxy(pm.x,pm.y); putchar(matriz[pm.x][pm.y]);
                         pm.x=16;
                         pm.y=14;
+                        for(j=0; j<4; j++)
+                        {
+
+                            aux[j]=fant[j].x;
+                            auxy[j]=fant[j].y;
+                            fant[j].x=14;
+                            fant[j].y=14;
+                            gotoxy(auxy[j],aux[j]); putchar(matriz[aux[j]][auxy[j]]);
+                        }
                     }
                    else GAMEOVER(ponto);
                 }
