@@ -4,7 +4,7 @@
 #include <conio.h>
 #include <dos.h>
 
-int estagio=0, matriz[31][28], barra[31][28];
+int estagio=2, matriz[31][28], barra[31][28];
 char nome[7];
 //center of axis is set to the top left cornor of the screen
 COORD coordi= {0,0};
@@ -108,7 +108,7 @@ int mapa(){
         a[9] ="2 caaa aaaaaaaaaaaaaa aaad 2";
         a[10]="2 b                      b 2";
         a[11]="2 b   caaaaaa  aaaaaad   b 2";
-        a[12]="2 b   b              b   b=2";
+        a[12]="2 b   b              b   b 2";
         a[13]="2 b   fd 0311aa1140 ce   b 2";
         a[14]="0 b   ce 0200000020 fd   b 0";
         a[15]="2 b   b  0611111150  b   b 2";
@@ -380,18 +380,19 @@ void movimento(int c,int *x,int *y){
             break;}
 }
 void direcao(int *x, int *y){
-    static char c, c2, f,ldpause;
+    static char c, c2, f,ldpause, d;
     int antgx=*x, antgy=*y;
 
     fflush(stdin);//????
     if(kbhit())
     {
-
+        d=getch();
+        if(d=='w' || d=='s' || d=='a' || d=='d'){
         c2=c;
-        c=getch();
-        f=1;
+        c=d;
+        f=1;}
     }
-       movimento(c,x,y);
+    movimento(c,x,y);
 
     if ((barra[*x][*y]==1 || barra[*x][*y]==2)&& f==1)
     {
@@ -471,7 +472,7 @@ void ranking(void)
     fclose(arq);
      //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
     fopen("ranking.txt","r");
-    for(i=0; i<=NumLin; i++)
+    for(i=0; i<=NumLin || i==0; i++)
     {
         for(j=0; j<2; j++)
         {
@@ -493,9 +494,10 @@ void ranking(void)
     printf("NOME\t\tSCORE\n");
     for(i=0; i<=NumLin-ajuste;i++)
     {
-        printf("%s\t--\t%i\n", player[i].name, player[i].score);
+        printf("%d. %s\t--\t%i\n", i+1, player[i].name, player[i].score);
     }
     printf("\nPressione qualquer tecla para voltar ao menu...");
+    fflush(stdin);
     if(kbhit())menu();
 }
 
@@ -513,10 +515,10 @@ void arquivos(int ponto)
     //DESCOBRIMOS QUANTAS LINHAS TEREMOS
     fopen("ranking.txt","r");
     while((c=fgetc(file))!=EOF){if(c=='\n' || c=='\r')NumLin++;}
-    fclose(file);
+   fclose(file);
     fopen("ranking.txt","r");
     //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
-    for(i=0; i<=NumLin; i++)
+    for(i=0; i<NumLin || i==0; i++)
     {
         for(j=0; j<2; j++)
         {
@@ -537,26 +539,30 @@ void arquivos(int ponto)
     novo.score=ponto;
     strcpy(novo.name,nome);
     //strcat(novo.name,"\n"); //COLOCAMOS UM CARACTERE PULAR LINHA NO FIM DA STRING
-    //ORGANIZANDO EM ORDEM
-    for(i=NumLin; i>=0; i--)
-    {
+    //ORGANIZANDO EM ORDEMN
+    if(NumLin==0){
         if(player[0].score==0)
         {
             player[0].score=novo.score;
             strcpy(player[0].name,novo.name);
         }
+    }
+    else {for(i=NumLin-1; i>=0; i--)
+    {
+
         if(novo.score<=player[i].score)
         {
             //TROCANDO AS POSIÇÕES
             tempor2.score=novo.score; strcpy(tempor2.name,novo.name);
-        for(j=i; j<NumLin+1; j++)
+        for(j=i+1; j<NumLin; j++)
         {
-            tempor1.score=player[j+1].score; strcpy(tempor1.name,player[j+1].name);
-            player[j+1].score=tempor2.score; strcpy(player[j+1].name,tempor2.name);
+            tempor1.score=player[j].score; strcpy(tempor1.name,player[j].name);
+            player[j].score=tempor2.score; strcpy(player[j].name,tempor2.name);
             tempor2.score=tempor1.score;     strcpy(tempor2.name,tempor1.name);
         }
             break;
         }
+    }
     }
     fopen("ranking.txt","w");
 
@@ -612,7 +618,7 @@ void jogo(int estagio){
     {
 
             for(i=0; i<4; i++)
-            {   if(especial[i])mudacor(1);
+            {   if(especial[i])mudacor(9);
                 else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(12):i==3?mudacor(6):0;
                 if(pis%(especial[i]==1?20:(20-estagio))==0){
                 auxy[i]=fant[i].y;
@@ -741,6 +747,7 @@ void menu(){
                     while(1){
                     system("cls"); titulo1(); mudacor(15);
                     printf("\n\n\t\tDigite seu nome em 3 letras:\n\t\t\t\t");
+                    fflush(stdin);
                     if(kbhit())
                     {
                       gets(nome);
