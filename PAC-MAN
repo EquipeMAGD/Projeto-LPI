@@ -5,11 +5,17 @@
 #include <dos.h>
 
 int estagio=0, matriz[31][28], barra[31][28];
+char nome[7];
 //center of axis is set to the top left cornor of the screen
 COORD coordi= {0,0};
 typedef struct coord{
     int x, y;
 } coord;
+struct dado
+{
+    int score;
+    char name[7];
+};
 void mudacor(int i){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
 
@@ -102,7 +108,7 @@ int mapa(){
         a[9] ="2 caaa aaaaaaaaaaaaaa aaad 2";
         a[10]="2 b                      b 2";
         a[11]="2 b   caaaaaa  aaaaaad   b 2";
-        a[12]="2 b   b              b   b=2";
+        a[12]="2 b   b              b   b 2";
         a[13]="2 b   fd 0311aa1140 ce   b 2";
         a[14]="0 b   ce 0200000020 fd   b 0";
         a[15]="2 b   b  0611111150  b   b 2";
@@ -225,7 +231,7 @@ int mapa(){
             else{
             mudacor(14);
             putchar(matriz[i][j]);}
-            if(matriz[i][j]==250||matriz==248){
+            if(matriz[i][j]==250||matriz[i][j]==248){
             mudacor(14);
             contcomida++;
             //putchar(matriz[i][j]);
@@ -303,8 +309,8 @@ void titulo1(void){
          movanima1(anim);printf(" ______""       ""  /    \\\n");
          movanima1(anim);printf("/      \\""      "" /     /\n");
          movanima1(anim);printf("|  ()()|""      "" |    /\n");// for(i=0;i<anim;i++) // printf(" () "); // putchar(' ');
-         for(K=anim*2;K>(anim);K--)printf(" O  ");putchar(' ');printf("|      |""      "" |    \\"); // for(i=12;i>anim;i--) // printf(" () ");
-         for(i=13;i>anim;i--)printf(" O  ");printf("  ");putchar('\n');
+         for(K=anim*2;K>(anim);K--)printf(" O  ");printf(" ");printf("|      |""      "" |    \\"); // for(i=12;i>anim;i--) // printf(" () ");
+         for(i=13;i>anim;i--)printf(" O  ");printf(" O");putchar('\n');
          movanima1(anim);printf("|      |""      "" \\     \\\n");
          movanima1(anim);printf("|/\\/\\/\\|""      ""  \\____/\n\n");
 
@@ -361,58 +367,130 @@ void movimento(int c,int *x,int *y){
      switch(c)
         {
         case 'w':
-            *x-=1;
-            break;
-        case 's':
-            *x+=1;
-            break;
-        case 'a':
             *y-=1;
             break;
-        case 'd':
+        case 's':
             *y+=1;
+            break;
+        case 'a':
+            *x-=1;
+            break;
+        case 'd':
+            *x+=1;
             break;}
 }
 void direcao(int *x, int *y){
-    static char c, c2, f,ldpause;
+    static char c, c2, f,ldpause, d;
     int antgx=*x, antgy=*y;
 
     fflush(stdin);//????
     if(kbhit())
     {
-
+        d=getch();
+        if(d=='w' || d=='s' || d=='a' || d=='d'){
         c2=c;
-        c=getch();
-        f=1;
+        c=d;
+        f=1;}
     }
+    movimento(c,x,y);
 
-       movimento(c,x,y);
-
-
-
-    if ((barra[*x][*y]==1 || barra[*x][*y]==2)&& f==1)
+    if ((barra[*y][*x]==1 || barra[*y][*x]==2)&& f==1)
     {
         *x=antgx;
         *y=antgy;
         movimento(c2,x,y);
-
     }
     else f=0;
-    if(*y>=27) *y=0;
-    else if(*y<=0) *y=27;
-    if (barra[*x][*y]==1 ||barra[*x][*y]==2)
+    if(*x>=27) *x=0;
+    else if(*x<=0) *x=27;
+    if (barra[*y][*x]==1 ||barra[*y][*x]==2)
     {
         *x=antgx;
         *y=antgy;
     }
 }
+/*void cond_mov_fantasma(int y,int x,int *pos)
+{
+    if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==0);
+    else if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==1);
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1 && barra[y][x-1]==1 &&barra[y][x+1]==0)           //diagonal inferior direita
+    {
+        *pos=random2(3,0);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1&& barra[y][x-1]==0 &&barra[y][x+1]==1)          //diagonal inferior esquerda
+    {
+        *pos=random2(2,0);
+    }
+    else if(barra[y-1][x]==1 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==0)      //diagonal superior esquerda
+    {
+        *pos=random2(3,1);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1 && barra[y][x-1]==1 &&barra[y][x+1]==0)     //diagonal superior direita
+    {
+        *pos=random2(2,1);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==0)       //cruzamento voltado para direita
+    {
+        *pos=random3(0,1,3);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==0 &&barra[y][x+1]==1)        //cruzamento voltado para esquerda
+    {
+        *pos=random3(0,1,2);
+    }
+    else if(barra[y-1][x]==1 && barra[y+1][x]=0 && barra[y][x-1]==0 &&barra[y][x+1]==0)       //cruzamento voltado para baixo
+    {
+        *pos=random3(1,2,3);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1 && barra[y][x-1]==0 &&barra[y][x+1]==0)       //cruzamento voltado para cima
+    {
+        *pos=random3(0,2,3);
+    }
+    else if(barra[y-1][x]==1 && barra[y+1][x]=1 && barra[y][x-1]==0 &&barra[y][x+1]==0)          //cruzamento
+    {
+        *pos= 1+rand()%3;
+    }
+    else if((!wall(y-1,x)) && (!wall(y+1,x)) && wall(y,x-1) && (!wall(y,x+1)))
+    {
+        *pos=2;
+    }
+    else if((!wall(y-1,x)) && (!wall(y+1,x)) && (!wall(y,x-1)) && wall(y,x+1))
+    {
+        *pos=3;
+    }
+
+
+}
+
+void movimento_fantasma(int pos,int *x,int *y)
+{
+    switch(pos)
+    {
+    case 0:
+
+        *y=*y-1;
+        break;
+    case 1:
+        *y=*y+1;
+        break;
+    case 2:
+        *x=*x-1;
+        break;
+    case 3:
+        *x=*x+1;
+        break;
+
+    }
+
+}*/
 void dirrand(int *x, int *y,int xpac,int ypac){
     int n, antgx=*x, antgy=*y;
     static int cont=0;
-
     cont++;
+    if (*x==14 && *y==14){
+        *y-=1;
+    }
     //Faz seguir o Pacman
-    if(*x==xpac || *y==ypac)
+    else if(*x==xpac || *y==ypac)
     {
         if(*x>xpac && *y==ypac)*x-=1;
         else if(*x<xpac && *y==ypac)*x+=1;
@@ -441,12 +519,12 @@ void dirrand(int *x, int *y,int xpac,int ypac){
     }
     do
     {
-        if(barra[*x][*y]==2) //Barreira especial para a caixa dos fantasmas
+        if(barra[*y][*x]==2) //Barreira especial para a caixa dos fantasmas
         {
-            *x-=1;
+            *y-=1;
             dirrand(x,y,0,0);
         }
-        else if(barra[*x][*y]==1||barra[*x][*y]==3)//Recurssividade para que o fantasma não fique batendo na parede
+        else if(barra[*y][*x]==1||barra[*y][*x]==3)//Recurssividade para que o fantasma não fique batendo na parede
         {
             *x=antgx;
             *y=antgy;
@@ -454,10 +532,183 @@ void dirrand(int *x, int *y,int xpac,int ypac){
         }
         //Dar a volta no mapa
     }
-    while(barra[*x][*y]==1||barra[*x][*y]==3);
+    while(barra[*y][*x]==1||barra[*y][*x]==3);
 }
+/*
+int random(int num1,int num2,int num3,int num4){
+    int escolhido=0;
+    do {
+    switch (rand()%4){
+      case 0:
+        escolhido = num1;
+        break;
+         case 1:
+        escolhido = num2;
+        break;
+         case 2:
+        escolhido = num3;
+        break;
+         case 3:
+        escolhido = num4;
+        break;
+    }
+    }while(escolhido==0);
+    return escolhido;
+
+}
+int decmov(int pos,int x,int y){
+if (pos*barra[y][x]==0)return pos;
+    else return 0;
+}
+int escolhemovfant(int x,int y){
+int posa=1,posb=2,posc=3,posd=4;
+    posa=decmov(posa,x,y-1);
+    posb=decmov(x,y+1);
+    posc=decmov(x-1,y);
+    psod=decmov(x+1,y);
+    return random(posa,posb,posc,posd);
+}
+void moverfant(int n){
+switch(n)
+        {
+        case 1:
+            *x-=1;
+            break;
+        case 2:
+            *x+=1;
+            break;
+        case 3:
+            *y-=1;
+            break;
+        case 4:
+            *y+=1;
+            break;
+        }
+}
+*/void ranking(void)
+{
+    struct dado player[10];
+    int aux=10, i, j, ajuste=0, NumLin=0;
+    char c, control[15];
+    FILE *arq;
+    arq = fopen("ranking.txt","r");
+    if(arq==NULL)
+        {
+            system("cls");
+            printf("\n\n\t\t  NOME\t\t\t\t\tSCORE\n\n");
+            while(aux>0){ printf("\t\t  --- . . . . . . . . . . . . . . . . . ---\n\n"); aux--;}
+            printf("\n\n\t\tPressione qualquer tecla para voltar ao menu...");
+            getch(); menu();
+        }
+    while((c=fgetc(arq))!=EOF){if(c=='\n' || c=='\r')NumLin++;}
+    fclose(arq);
+     //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
+    fopen("ranking.txt","r");
+    for(i=0; i<NumLin || i==0; i++)
+    {
+        for(j=0; j<2; j++)
+        {
+            if(j==0)
+            {
+                fscanf(arq,"%i",&player[i].score);
+            }
+            else if(j==1)
+            {
+                fgetc(arq); //ANDAMOS UM CARACTERE
+                fgets(control, 4, arq);
+                fgetc(arq);  //ANDSMOS UM CARACTERE
+                strcpy(player[i].name,control);
+            }
+        }
+    }
+    fclose(arq);
+    //IMPRIMINDO OS JOGADORES
+    if(NumLin==0){ajuste++;}
+     system("cls");
+     printf("\n\n\t\t  NOME\t\t\t\t\tSCORE\n\n");
+    for(i=0; i<NumLin+ajuste;i++)
+    {
+        printf("\t      %d.  %s . . . . . . . . . . . . . . . . . %i\n\n", i+1, player[i].name, player[i].score); aux--;
+    }
+    printf("\n\t\tPressione qualquer tecla para voltar ao menu...");
+    getch();menu();
+}
+
+void arquivos(int ponto)
+{
+    struct dado player[10]; player[0].score=0;
+    struct dado tempor1, tempor2;
+    struct dado novo;
+    int i,j, pontos[10][10], NumLin=0;
+    char dados[10][15], control[15], c;
+
+    FILE *file;
+    file = fopen("ranking.txt","a");
+    fclose(file);
+    //DESCOBRIMOS QUANTAS LINHAS TEREMOS
+    fopen("ranking.txt","r");
+    while((c=fgetc(file))!=EOF){if(c=='\n' || c=='\r')NumLin++;}
+   fclose(file);
+    fopen("ranking.txt","r");
+    //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
+    for(i=0; i<NumLin || i==0; i++)
+    {
+        for(j=0; j<2; j++)
+        {
+            if(j==0)
+            {
+                fscanf(file,"%i",&player[i].score);
+            }
+            else if(j==1)
+            {
+                fgetc(file);
+                fgets(control, 4, file); fgetc(file);
+                strcpy(player[i].name,control);
+            }
+        }
+    }
+    fclose(file);
+    //PEGAMOS OS DADOS DO JOGADOR ATUAL
+    novo.score=ponto;
+    strcpy(novo.name,nome);
+    //strcat(novo.name,"\n"); //COLOCAMOS UM CARACTERE PULAR LINHA NO FIM DA STRING
+    //ORGANIZANDO EM ORDEMN
+    if(NumLin==0){
+        if(player[0].score==0)
+        {
+            player[0].score=novo.score;
+            strcpy(player[0].name,novo.name);
+        }
+    }
+    else {for(i=NumLin-1; i>=0; i--)
+    {
+
+        if(novo.score<=player[i].score)
+        {
+            //TROCANDO AS POSIÇÕES
+            tempor2.score=novo.score;      strcpy(tempor2.name,novo.name);
+        for(j=i+1; j<=NumLin; j++)
+        {
+            tempor1.score=player[j].score; strcpy(tempor1.name,player[j].name);
+            player[j].score=tempor2.score; strcpy(player[j].name,tempor2.name);
+            tempor2.score=tempor1.score;   strcpy(tempor2.name,tempor1.name);
+        }
+            break;
+        }
+    }
+    }
+    fopen("ranking.txt","w");
+
+  for(i=0; i<=NumLin; i++)
+  {
+    fprintf(file,"%i ", player[i].score);
+    fputs(player[i].name,file);
+    fputc('\n',file);
+  }
+  fclose(file);
+}
+
 void GAMEOVER(int ponto){
-    char nome[20];
     char rp;
 
     system("cls");
@@ -466,29 +717,24 @@ void GAMEOVER(int ponto){
            "\n\n\tPressione qualquer tecla...\n\n", ponto);
     fflush(stdin);
     getch();
-
-    FILE *file;
-    file = fopen("ranking.txt","a");
-    printf("\tDigite seu nome: ");
-    gets(nome);
-    fputs(nome,file);
-    fprintf(file," ---  %i", ponto);
-    fputc('\n',file);
-    fclose(file);
+    arquivos(ponto);
+  //  ====-------
+  // antigo corpo de arquivos
+  // -----========
     system("cls");
     printf("\n\n\n\n\n\tPontuacao salva.\n\n\tPressione Qualquer tecla...");
     getch();
     menu();
 }
-void jogo(int estagio){
+void jogo(int vida){
     int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial[4]={0,0,0,0};
-    int contcomida=0,duracaoesp,trocarface;
+    int contcomida=0,duracaoesp,trocarface,delayfant[4]={0,0,0,0},contfantc=1;
     coord pm, fant[4];
     system("cls");
 
     //DEFINIÇÃO DE COORDENADAS INICIAIS
-    pm.x=16;
-    pm.y=14;
+    pm.x=14;
+    pm.y=16;
     for(i=0; i<4; i++)
     {
         fant[i].x=14;
@@ -505,19 +751,21 @@ void jogo(int estagio){
     {
 
             for(i=0; i<4; i++)
-            {   if(especial[i])mudacor(1);
+            {   if(especial[i])mudacor(9);
                 else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(12):i==3?mudacor(6):0;
-                if(pis%(especial[i]==1?20:(20-estagio))==0){
+                if(fant[i].y==14 && fant[i].x==14 && delayfant[i]==0){contfantc++;delayfant[i]=contfantc;}
+                else if(delayfant[i]==0)delayfant[i]=1;
+                if(pis%(especial[i]==1?20:((20*delayfant[i])-estagio))==0){
                 auxy[i]=fant[i].y;
                 aux[i]=fant[i].x;
                 dirrand(&fant[i].x, &fant[i].y,pm.x, pm.y);
-                    gotoxy(fant[i].y,fant[i].x);
+                    gotoxy(fant[i].x,fant[i].y);
                     putchar(182);
                     if(fant[i].y!=auxy[i] || fant[i].x!=aux[i])
                     {
-                        gotoxy(auxy[i],aux[i]);
+                        gotoxy(aux[i],auxy[i]);
                         mudacor(14);
-                        printf("%c",matriz[aux[i]][auxy[i]]);
+                        printf("%c",matriz[auxy[i]][aux[i]]);
                     }
 
                 if(fant[i].x==pm.x && fant[i].y==pm.y)
@@ -529,48 +777,75 @@ void jogo(int estagio){
                         fant[i].y=14;
                         especial[i]=0;
                     }
-                   else GAMEOVER(ponto);
+                    else if(vida!=0)
+                    {
+                        vida--;
+                        pm.x=14;
+                        pm.y=16;
+                        for(j=0; j<4; j++)
+                        {
+
+                            aux[j]=fant[j].x;
+                            auxy[j]=fant[j].y;
+                            fant[j].x=14;
+                            fant[j].y=14;
+                            gotoxy(aux[j],auxy[j]); putchar(matriz[auxy[j]][aux[j]]);
+                        }
+                    }
+                    else GAMEOVER(ponto);
                 }
-            }
+ delayfant[i]=0; }
         }
         auxy[4]=pm.y;
         aux[4]=pm.x;
         if(pis%19==0)
-        {   gotoxy(55,15);mudacor(15);
+        {
+            //Informações adicionais na tela
+            for(i=3; i>vida; i--)
+            {
+                gotoxy(3+i, 31); putchar(' ');
+            }
+            for(i=vida;i>0;i--){
+            gotoxy(3+i,31);mudacor(12);
+            printf("%c",3);}
+            gotoxy(9,31);mudacor(15);
+            printf("%s - ",nome);
+            gotoxy(15,31);mudacor(15);
             printf("%d",ponto);
+
             direcao(&pm.x, &pm.y);
-             if( (matriz[pm.x][pm.y]==250||matriz[pm.x][pm.y]==248))
+             if( (matriz[pm.y][pm.x]==250||matriz[pm.y][pm.x]==248))
                 {
                     contcomida--;
-                    if(contcomida==0)jogo(estagio+=1);
-                    if(matriz[pm.x][pm.y]==248)
+                    if(contcomida==0){estagio+=1;jogo(vida);}
+                    if(matriz[pm.y][pm.x]==248)
                     {   for(i=0;i<4;i++)
                         especial[i]=1;
                         duracaoesp=0;
                     }
                     else ponto++;
-                    matriz[pm.x][pm.y]=' ';
+                    matriz[pm.y][pm.x]=' ';
                     mudacor(14);
                     if(trocarface>2){ putchar('C');trocarface++;}
-                    gotoxy(pm.y,pm.x);
+                    gotoxy(pm.x,pm.y);
                     if(pis%10==0){
                             putchar('O');}
                     else if(pis%10!=0){ putchar('C');}
                     if(pm.y!=auxy[4] || pm.x!=aux[4])
                     {
-                        gotoxy(auxy[4],aux[4]);
+                        gotoxy(aux[4],auxy[4]);
                         putchar(' ');
                     }
 
                 }
-                else if( matriz[pm.x][pm.y]==' ')
+                else if( matriz[pm.y][pm.x]==' ')
                 {   mudacor(14);
-                    gotoxy(pm.y,pm.x);
+                    gotoxy(pm.x,pm.y);
                     if(pis%40<20) putchar('O');
                     else putchar('C');
                     if(pm.y!=auxy[4] || pm.x!=aux[4])
                     {
-                        gotoxy(auxy[4],aux[4]);
+                        gotoxy(aux[4],auxy[4]);
                         putchar(' ');
                     }
                 }
@@ -584,12 +859,29 @@ void jogo(int estagio){
                         fant[i].y=14;
                         especial[i]=0;
                     }
+                   else if(vida!=0)
+                    {
+                        vida--;
+                       // gotoxy(pm.x,pm.y); putchar(matriz[pm.x][pm.y]);
+                        pm.x=14;
+                        pm.y=16;
+                        for(j=0; j<4; j++)
+                        {
+
+                            aux[j]=fant[j].x;
+                            auxy[j]=fant[j].y;
+                            fant[j].x=14;
+                            fant[j].y=14;
+                            gotoxy(aux[j],auxy[j]); putchar(matriz[auxy[j]][aux[j]]);
+                        }
+                    }
                    else GAMEOVER(ponto);
                 }
               }
         }
 
         Sleep(10);
+        contfantc=0;
         pis++;
         duracaoesp++;
         if(duracaoesp==750){
@@ -600,7 +892,7 @@ void jogo(int estagio){
 }
 void menu(){
     char ast[4]={'>',' ',' '}, dir;
-    int n=0;
+    int n=0, cont=0;
     while(1)
     {
         system("cls");
@@ -629,8 +921,24 @@ void menu(){
             }
             else if(dir=='\n'||dir=='\r')
             {   putchar ('\7');
-                if(n==0) jogo(estagio);
-                //else if(n==1)
+                if(n==0)
+                {
+                    while(1){
+                    system("cls"); titulo1(); mudacor(15);
+                    printf("\n\n\t\tDigite seu nome em 3 letras:\n\t\t\t\t");
+                    fflush(stdin);
+                    if(kbhit())
+                    {
+                      gets(nome);
+
+                      jogo(3);
+                    } Sleep(100);
+                    }
+                }
+                else if(n==1)
+                {
+                ranking();
+                }
                 else if(n==2){
                     system("cls");
                     ajuda();
