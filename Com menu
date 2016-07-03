@@ -17,7 +17,6 @@ struct dado
 };
 void mudacor(int i){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
-
 }
 int mapa(){
        //Desenho do Mapa
@@ -289,19 +288,27 @@ void movanima2(int distanc){
 for(i=0;i<=distanc;i++)putchar(' ');
 }
 void ajuda(){
-    printf("\n\n\t\t\t\t INICIANDO O JOGO:\n\n"
-           "\t\t\tPARA INICIAR ESCOLHA A PRIMEIRA OPCAO NO MENU!\n\n"
-           "\t\t\t\t PRIMEIRO PASSOS NO JOGO:\n\n"
-           "\t\t\t\tUSE AS TECLAS DIRECIONAIS:\n"
-           "\t\t\t\t-->\"w\" PARA SE MOVER PRA CIMA."
-           "\n\t\t\t\t-->\"a\" PARA SE MOVER PRA ESQUERDA."
-           "\n\t\t\t\t-->\"s\" PARA SE MOVER PRA BAIXO."
-           "\n\t\t\t\t-->\"d\" PARA SE MOVER PRA DIREITA.\n");
-    printf("\t\tpara consultar a pontuacao, escolha a opcao de numero 2 no menu\n\t\tpara sair, escolha a opcao de numero 4 no menu\n");
-    printf("\t\t\pressione qualquer tecla para continuar...");
+    cursor();
+    char a=135,b=198,c=163,d=228,e=128,f=199;
+    int x,y;
+    mudacor(12);
+    printf("\n\n\t\t\t     INICIANDO O JOGO:\n\n");
+    mudacor(11);
+    printf("\t\t  PARA INICIAR ESCOLHA A PRIMEIRA OP%c%cO NO MENU!\n\n",e,f);
+    mudacor(12);
+    printf("\t\t\t PRIMEIROS PASSOS NO JOGO:\n\n");
+    mudacor(11);
+    printf("\t\t\tUSE AS TECLAS DIRECIONAIS:\n\n"
+           "\t\t\t-->\"w\" PARA SE MOVER PRA CIMA."
+           "\n\t\t\t-->\"a\" PARA SE MOVER PRA ESQUERDA."
+           "\n\t\t\t-->\"s\" PARA SE MOVER PRA BAIXO."
+           "\n\t\t\t-->\"d\" PARA SE MOVER PRA DIREITA.\n\n");
+           mudacor(12);
+    printf("\t-para consultar a pontua%c%co, escolha a op%c%co 2(Pontua%c%ces) no menu\n\n\t-para sair, escolha a op%c%co 4(SAIR) no menu\n\n", a,b,a,b,a,d,a,b);
+    mudacor(7);
+    printf("\t\tpressione qualquer tecla para continuar...");
     getch();
     menu();
-}
 void titulo1(void){
     static int anim_menu1=0,anim=0;
     int i,K,distanc=48;
