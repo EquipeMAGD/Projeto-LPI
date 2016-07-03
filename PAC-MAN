@@ -5,26 +5,21 @@
 #include <dos.h>
 
 int estagio=0, matriz[31][28], barra[31][28];
-char nome[7];
-
 //center of axis is set to the top left cornor of the screen
 COORD coordi= {0,0};
-
-typedef struct coord
-{
+typedef struct coord{
     int x, y;
 } coord;
 struct dado
 {
     int score;
     char name[7];
-};
-void mudacor(int i)
-{
+}nome;
+void mudacor(int i){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
+
 }
-int mapa()
-{
+int mapa(){
        //Desenho do Mapa
    int i, j,contcomida=0;
    //matriz e ponteiro para desenho do mapa
@@ -248,21 +243,18 @@ int mapa()
     }
     return contcomida;
 }
-void movanima1(int anim)
-{
+void movanima1(int anim){
     int i,j=4,sub=14;
     if (anim>13){
     for(i=0;i<=(anim-sub)*j;i++)putchar(' ');}
   else{
     for(i=0;i<=anim*j;i++)putchar(' ');}
 }
-void movanima2(int distanc)
-{
+void movanima2(int distanc){
     int i;
 for(i=0;i<=distanc;i++)putchar(' ');
 }
-void ajuda()
-{
+void ajuda(){
     printf("\n\n\t\t\t\t INICIANDO O JOGO:\n\n"
            "\t\t\tPARA INICIAR ESCOLHA A PRIMEIRA OPCAO NO MENU!\n\n"
            "\t\t\t\t PRIMEIRO PASSOS NO JOGO:\n\n"
@@ -276,8 +268,7 @@ void ajuda()
     getch();
     menu();
 }
-void titulo1(void)
-{
+void titulo1(void){
     static int anim_menu1=0,anim=0;
     int i,K,distanc=48;
     anim_menu1++;
@@ -366,14 +357,12 @@ void titulo1(void)
 
     }
 }
-void gotoxy(int x,int y)
-{
+void gotoxy(int x,int y){
     coordi.X=x;
     coordi.Y=y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coordi);
 }
-void movimento(int c,int *x,int *y)
-{
+void movimento(int c,int *x,int *y){
      switch(c)
         {
         case 'w':
@@ -389,8 +378,7 @@ void movimento(int c,int *x,int *y)
             *x+=1;
             break;}
 }
-void direcao(int *x, int *y)
-{
+void direcao(int *x, int *y){
     static char c, c2, f,ldpause, d;
     int antgx=*x, antgy=*y;
 
@@ -420,34 +408,99 @@ void direcao(int *x, int *y)
         *y=antgy;
     }
 }
-void dirrand(int *x, int *y,int fant,int xpac,int ypac)
+/*void cond_mov_fantasma(int y,int x,int *pos)
 {
+    if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==0);
+    else if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==1);
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1 && barra[y][x-1]==1 &&barra[y][x+1]==0)           //diagonal inferior direita
+    {
+        *pos=random2(3,0);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1&& barra[y][x-1]==0 &&barra[y][x+1]==1)          //diagonal inferior esquerda
+    {
+        *pos=random2(2,0);
+    }
+    else if(barra[y-1][x]==1 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==0)      //diagonal superior esquerda
+    {
+        *pos=random2(3,1);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1 && barra[y][x-1]==1 &&barra[y][x+1]==0)     //diagonal superior direita
+    {
+        *pos=random2(2,1);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==1 &&barra[y][x+1]==0)       //cruzamento voltado para direita
+    {
+        *pos=random3(0,1,3);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=0 && barra[y][x-1]==0 &&barra[y][x+1]==1)        //cruzamento voltado para esquerda
+    {
+        *pos=random3(0,1,2);
+    }
+    else if(barra[y-1][x]==1 && barra[y+1][x]=0 && barra[y][x-1]==0 &&barra[y][x+1]==0)       //cruzamento voltado para baixo
+    {
+        *pos=random3(1,2,3);
+    }
+    else if(barra[y-1][x]==0 && barra[y+1][x]=1 && barra[y][x-1]==0 &&barra[y][x+1]==0)       //cruzamento voltado para cima
+    {
+        *pos=random3(0,2,3);
+    }
+    else if(barra[y-1][x]==1 && barra[y+1][x]=1 && barra[y][x-1]==0 &&barra[y][x+1]==0)          //cruzamento
+    {
+        *pos= 1+rand()%3;
+    }
+    else if((!wall(y-1,x)) && (!wall(y+1,x)) && wall(y,x-1) && (!wall(y,x+1)))
+    {
+        *pos=2;
+    }
+    else if((!wall(y-1,x)) && (!wall(y+1,x)) && (!wall(y,x-1)) && wall(y,x+1))
+    {
+        *pos=3;
+    }
 
-    int n, antgx=*x, antgy=*y;
-    static int cont=0,mov[4];
-    if (*x==14 && *y==14){
-        *y-=1;
+
+}
+
+void movimento_fantasma(int pos,int *x,int *y)
+{
+    switch(pos)
+    {
+    case 0:
+
+        *y=*y-1;
+        break;
+    case 1:
+        *y=*y+1;
+        break;
+    case 2:
+        *x=*x-1;
+        break;
+    case 3:
+        *x=*x+1;
+        break;
 
     }
+
+}*/
+void dirrand(int *x, int *y,int xpac,int ypac){
+    int n, antgx=*x, antgy=*y;
+    static int cont=0;
+    cont++;
+    if (*x==14 && *y==14){
+        *y-=1;
+    }
     //Faz seguir o Pacman
-   else if(*x==xpac || *y==ypac)
+    else if(*x==xpac || *y==ypac)
     {
         if(*x>xpac && *y==ypac)*x-=1;
         else if(*x<xpac && *y==ypac)*x+=1;
         else if(*y>ypac && *x==xpac)*y-=1;
         else *y+=1;
-        mov[fant]=5;
     }
     else//Move aleatóriamente
     {
-
-        n=rand()%4;
-        //if((barra [*y-1][*x]==0 && barra [*y+1][*x]==0 &&(barra [*y][*x-1]==1  &&barra [*y][*x+1]==1))&& mov[fant]!=5);
-        //else if(((barra [*y-1][*x]==1 && barra [*y+1][*x]==1) && (barra [*y][*x-1]==0 && barra [*y][*x+1]==0))&&(barra [*y][*x-1]!=3 && barra [*y][*x+1]!=3)&& mov[fant]!=5);
-        //else
-            mov[fant]=n;
-
-        switch(mov[fant])
+        if(cont>12) n=rand()%4;
+        else n=0;
+        switch(n)
         {
         case 0:
             *x-=1;
@@ -468,19 +521,20 @@ void dirrand(int *x, int *y,int fant,int xpac,int ypac)
         if(barra[*y][*x]==2) //Barreira especial para a caixa dos fantasmas
         {
             *y-=1;
-            dirrand(x,y,fant,0,0);
+            dirrand(x,y,0,0);
         }
         else if(barra[*y][*x]==1||barra[*y][*x]==3)//Recurssividade para que o fantasma não fique batendo na parede
         {
             *x=antgx;
             *y=antgy;
-            dirrand(x,y,fant,0,0);
+            dirrand(x,y,0,0);
         }
+        //Dar a volta no mapa
     }
     while(barra[*y][*x]==1||barra[*y][*x]==3);
 }
-int random(int num1,int num2,int num3,int num4)
-{
+/*
+int random(int num1,int num2,int num3,int num4){
     int escolhido=0;
     do {
     switch (rand()%4){
@@ -501,56 +555,41 @@ int random(int num1,int num2,int num3,int num4)
     return escolhido;
 
 }
-int decmov(int pos,int x,int y)
-{
-if ((pos*barra[y][x])==0)return pos;
+int decmov(int pos,int x,int y){
+if (pos*barra[y][x]==0)return pos;
     else return 0;
 }
-int escolhemovfant(int x,int y)
-{
-int static testeA=0,testeB=0,testeC=0,testeD=0;
+int escolhemovfant(int x,int y){
 int posa=1,posb=2,posc=3,posd=4;
     posa=decmov(posa,x,y-1);
-    posb=decmov(posb,x,y+1);
-    posc=decmov(posc,x-1,y);
-    posd=decmov(posd,x+1,y);
-
+    posb=decmov(x,y+1);
+    posc=decmov(x-1,y);
+    psod=decmov(x+1,y);
     return random(posa,posb,posc,posd);
 }
-void moverfant(int n,int *x,int *y,int xpac,int ypac)
-{
-     if(*x==xpac || *y==ypac)
-    {
-        if(*x>xpac && *y==ypac)*x-=1;
-        else if(*x<xpac && *y==ypac)*x+=1;
-        else if(*y>ypac && *x==xpac)*y-=1;
-        else *y+=1;
-    }
-    else {
-            switch(n)
+void moverfant(int n){
+switch(n)
         {
         case 1:
-            *y-=1;
-            break;
-        case 2:
-            *y+=1;
-            break;
-        case 3:
             *x-=1;
             break;
-        case 4:
+        case 2:
             *x+=1;
             break;
+        case 3:
+            *y-=1;
+            break;
+        case 4:
+            *y+=1;
+            break;
         }
-    }
 }
-void ranking(void)
+*/void ranking(void)
 {
     struct dado player[10];
-    int aux=10, i, j, ajuste=0, NumLin=0;
-    char c, control[15];
+    int aux=10, imp, quantidade;
     FILE *arq;
-    arq = fopen("ranking.txt","r");
+    arq = fopen("ranking.bin", "rb");
     if(arq==NULL)
         {
             system("cls");
@@ -559,114 +598,91 @@ void ranking(void)
             printf("\n\n\t\tPressione qualquer tecla para voltar ao menu...");
             getch(); menu();
         }
-    while((c=fgetc(arq))!=EOF){if(c=='\n' || c=='\r')NumLin++;}
     fclose(arq);
-     //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
-    fopen("ranking.txt","r");
-    for(i=0; i<NumLin || i==0; i++)
-    {
-        for(j=0; j<2; j++)
-        {
-            if(j==0)
-            {
-                fscanf(arq,"%i",&player[i].score);
-            }
-            else if(j==1)
-            {
-                fgetc(arq); //ANDAMOS UM CARACTERE
-                fgets(control, 4, arq);
-                fgetc(arq);  //ANDSMOS UM CARACTERE
-                strcpy(player[i].name,control);
-            }
-        }
-    }
+
+    //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
+    arq = fopen("ranking.bin", "rb");
+
+    quantidade = fread(player, sizeof(struct dado), 10, arq);
+
     fclose(arq);
     //IMPRIMINDO OS JOGADORES
-    if(NumLin==0){ajuste++;}
      system("cls");
      printf("\n\n\t\t  NOME\t\t\t\t\tSCORE\n\n");
-    for(i=0; i<NumLin+ajuste;i++)
+    for(imp=0; imp<quantidade; imp++)
     {
-        printf("\t      %d.  %s . . . . . . . . . . . . . . . . . %i\n\n", i+1, player[i].name, player[i].score); aux--;
+        printf("\t      %d.  %s . . . . . . . . . . . . . . . . . %i\n\n", imp+1, player[imp].name, player[imp].score);
     }
     printf("\n\t\tPressione qualquer tecla para voltar ao menu...");
     getch();menu();
 }
+
 void arquivos(int ponto)
 {
     struct dado player[10]; player[0].score=0;
-    struct dado tempor1, tempor2;
+    struct dado tempor1[10], tempor2[10];
     struct dado novo;
-    int i,j, pontos[10][10], NumLin=0;
+    int i,j, pontos[10][10], jogadores, controle;
     char dados[10][15], control[15], c;
 
     FILE *file;
-    file = fopen("ranking.txt","a");
+    file = fopen("ranking.bin","r+b");
     fclose(file);
-    //DESCOBRIMOS QUANTAS LINHAS TEREMOS
-    fopen("ranking.txt","r");
-    while((c=fgetc(file))!=EOF){if(c=='\n' || c=='\r')NumLin++;}
-   fclose(file);
-    fopen("ranking.txt","r");
-    //PEGAMOS TODOS AS STRINGS DOS 10 JOGADORES
-    for(i=0; i<NumLin || i==0; i++)
-    {
-        for(j=0; j<2; j++)
-        {
-            if(j==0)
-            {
-                fscanf(file,"%i",&player[i].score);
-            }
-            else if(j==1)
-            {
-                fgetc(file);
-                fgets(control, 4, file); fgetc(file);
-                strcpy(player[i].name,control);
-            }
-        }
+    //DESCOBRIMOS QUANTOS JOGADORES TEMOS
+    //PEGAMOS TODOS AS STRINGS DE ATÉ 10 JOGADORES
+    fopen("ranking.bin","rb");
+    if (file == NULL) jogadores=0;
+    else {
+        jogadores = fread(player, sizeof(struct dado), 10, file);
     }
     fclose(file);
+
     //PEGAMOS OS DADOS DO JOGADOR ATUAL
     novo.score=ponto;
-    strcpy(novo.name,nome);
-    //strcat(novo.name,"\n"); //COLOCAMOS UM CARACTERE PULAR LINHA NO FIM DA STRING
-    //ORGANIZANDO EM ORDEMN
-    if(NumLin==0){
+    strcpy(novo.name,nome.name);
+
+    //ORGANIZAMOS EM ORDEM E SALVAMOS
+    if(jogadores==0){
         if(player[0].score==0)
-        {
-            player[0].score=novo.score;
-            strcpy(player[0].name,novo.name);
+        {  file = fopen("ranking.bin","wb");
+           fwrite(&novo, sizeof(struct dado), 1, file);
+           fclose(file);
         }
     }
-    else {for(i=NumLin-1; i>=0; i--)
-    {
+    else
+    {   for(i=jogadores-1; i>=0; i--)
+      {     if(novo.score<=player[i].score)
+        {   file = fopen("ranking.bin","rb");
+            printf("%i --- %i",novo.score, player[i].score);
+            getch();
+            fread(&tempor1, sizeof(struct dado), i+1, file);   //COPIAMOS ATÉ O LOCAL DESEJADO
+            fseek(file, sizeof(struct dado)*(i+1),SEEK_SET); //LOCAL PARA COMEÇO DE GRAVAÇÃO
+ controle = fread(&tempor2, sizeof(struct dado), jogadores-(i+1), file);  //SALVAMOS O QUE HÁ DEPOIS
+            fclose(file);
 
-        if(novo.score<=player[i].score)
-        {
-            //TROCANDO AS POSIÇÕES
-            tempor2.score=novo.score;      strcpy(tempor2.name,novo.name);
-        for(j=i+1; j<=NumLin; j++)
-        {
-            tempor1.score=player[j].score; strcpy(tempor1.name,player[j].name);
-            player[j].score=tempor2.score; strcpy(player[j].name,tempor2.name);
-            tempor2.score=tempor1.score;   strcpy(tempor2.name,tempor1.name);
-        }
+            file = fopen("ranking.bin","wb");
+            fwrite(tempor1, sizeof(struct dado), i+1, file);  //ESCREVEMOS OS PRIMEIROS
+            fwrite(&novo, sizeof(struct dado), 1, file);     //ESCREVEMOS O NOVO PLAYER
+            fwrite(tempor2, sizeof(struct dado), controle, file); //ESCREVEMOS O QUE HAVIA DEPOIS
+            fclose(file);
             break;
-        }
     }
-    }
-    fopen("ranking.txt","w");
+            if(novo.score>player[i].score) {
+            file = fopen("ranking.bin","rb");
+            fread(&tempor1, sizeof(struct dado), 1, file);  //GUARDAMOS TODOS OS JOGADORES
+            fclose(file);
 
-  for(i=0; i<=NumLin; i++)
-  {
-    fprintf(file,"%i ", player[i].score);
-    fputs(player[i].name,file);
-    fputc('\n',file);
-  }
-  fclose(file);
+            file = fopen("ranking.bin","wb");
+            fwrite(&novo, sizeof(struct dado), 1, file);     //ESCREVEMOS O NOVO PLAYER
+            fwrite(tempor1, sizeof(struct dado), 1, file);  //ESCREVEMOS OS DEMAIS JOGADORES
+        
+            break;
+            }
+    }
+    }
 }
-void GAMEOVER(int ponto)
-{
+
+void GAMEOVER(int ponto){
     char rp;
 
     system("cls");
@@ -684,11 +700,9 @@ void GAMEOVER(int ponto)
     getch();
     menu();
 }
-void jogo(int vida)
-{
+void jogo(int vida){
     int i, j, pis=1, t=50,aux[5],auxy[5], ponto=0,especial[4]={0,0,0,0};
     int contcomida=0,duracaoesp,trocarface,delayfant[4]={0,0,0,0},contfantc=1;
-    int movatual[4],movaux;
     coord pm, fant[4];
     system("cls");
 
@@ -697,8 +711,8 @@ void jogo(int vida)
     pm.y=16;
     for(i=0; i<4; i++)
     {
-        fant[i].x=12;
-        fant[i].y=12;
+        fant[i].x=14;
+        fant[i].y=14;
         aux[i]=fant[i].x;
         auxy[i]=fant[i].y;
     }
@@ -712,20 +726,13 @@ void jogo(int vida)
 
             for(i=0; i<4; i++)
             {   if(especial[i])mudacor(9);
-                else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(15):i==3?mudacor(6):0;
+                else i==0?mudacor(13):i==1?mudacor(11):i==2?mudacor(12):i==3?mudacor(6):0;
                 if(fant[i].y==14 && fant[i].x==14 && delayfant[i]==0){contfantc++;delayfant[i]=contfantc;}
                 else if(delayfant[i]==0)delayfant[i]=1;
                 if(pis%(especial[i]==1?20:((20*delayfant[i])-estagio))==0){
                 auxy[i]=fant[i].y;
                 aux[i]=fant[i].x;
-               // movaux=escolhemovfant(fant[i].x,fant[i].y);
-               // if(barra [fant[i].y-1][fant[i].x]==0 && barra [fant[i].y+1][fant[i].x]==0 &&barra [fant[i].y][fant[i].x-1]==1 &&barra [fant[i].y][fant[i].x+1]==1);
-               // else if(barra [fant[i].y-1][fant[i].x]==1 && barra [fant[i].y+1][fant[i].x]==1 &&barra [fant[i].y][fant[i].x-1]==0 &&barra [fant[i].y][fant[i].x+1]==0);
-               // else movatual[i]=movaux;
-               // moverfant(movatual[i],&fant[i].x,&fant[i].y,pm.x,pm.y);
-
-
-                dirrand(&fant[i].x, &fant[i].y,i,pm.x, pm.y);
+                dirrand(&fant[i].x, &fant[i].y,pm.x, pm.y);
                     gotoxy(fant[i].x,fant[i].y);
                     putchar(182);
                     if(fant[i].y!=auxy[i] || fant[i].x!=aux[i])
@@ -776,7 +783,7 @@ void jogo(int vida)
             gotoxy(3+i,31);mudacor(12);
             printf("%c",3);}
             gotoxy(9,31);mudacor(15);
-            printf("%s - ",nome);
+            printf("%s - ",nome.name);
             gotoxy(15,31);mudacor(15);
             printf("%d",ponto);
 
@@ -857,8 +864,7 @@ void jogo(int vida)
         if(trocarface>4)trocarface=0;
     }
 }
-void menu()
-{
+void menu(){
     char ast[4]={'>',' ',' '}, dir;
     int n=0, cont=0;
     while(1)
@@ -897,7 +903,7 @@ void menu()
                     fflush(stdin);
                     if(kbhit())
                     {
-                      gets(nome);
+                      gets(nome.name);
 
                       jogo(3);
                     } Sleep(100);
@@ -921,7 +927,6 @@ void menu()
         Sleep(100);
     }
 }
-void main ()
-{
+void main (){
     menu();
 }
