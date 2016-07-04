@@ -288,16 +288,16 @@ void movanima2(int distanc){
 for(i=0;i<=distanc;i++)putchar(' ');
 }
 void ajuda(){
-    cursor();
-    char a=135,b=198,c=163,d=228,e=128,f=199;
+
+    char a=135,b=198,c=163,d=228,e=128,f=199,g=130,h=162;
     int x,y;
-    mudacor(12);
+     mudacor(12);
     printf("\n\n\t\t\t     INICIANDO O JOGO:\n\n");
-    mudacor(11);
+     mudacor(11);
     printf("\t\t  PARA INICIAR ESCOLHA A PRIMEIRA OP%c%cO NO MENU!\n\n",e,f);
-    mudacor(12);
+     mudacor(12);
     printf("\t\t\t PRIMEIROS PASSOS NO JOGO:\n\n");
-    mudacor(11);
+     mudacor(11);
     printf("\t\t\tUSE AS TECLAS DIRECIONAIS:\n\n"
            "\t\t\t-->\"w\" PARA SE MOVER PRA CIMA."
            "\n\t\t\t-->\"a\" PARA SE MOVER PRA ESQUERDA."
@@ -305,10 +305,28 @@ void ajuda(){
            "\n\t\t\t-->\"d\" PARA SE MOVER PRA DIREITA.\n\n");
            mudacor(12);
     printf("\t-para consultar a pontua%c%co, escolha a op%c%co 2(Pontua%c%ces) no menu\n\n\t-para sair, escolha a op%c%co 4(SAIR) no menu\n\n", a,b,a,b,a,d,a,b);
+    mudacor(12);
+    printf("\t\t\t JOGANDO O JOGO:\n\n");
+    printf("\t\t\t Pontua%c%ces:\n\n",a,d);
+      mudacor(11);
+    printf("\t\t\tcomida normal ----- 1"
+           "\n\t\t\tbolas especiais ----- 50"
+           "\n\t\t\tfantasma ----- 100");
+      mudacor(12);
+    printf("\n\n\t\t\t informa%c%ces adicionais",a,d);
+     mudacor(11);
+    printf("\n\n\t\t\tDura%c%co do especial ----- 10 seg"
+           "\n\t\t\tQuantidade de vidas ----- 4"
+           "\n\t\t\tfantasma ----- 100"
+           "\n\t\t\tAo comer um fantasma, ele volta ao normal"
+           "\n\t\t\tDurante o especial a velocidade dos fantasmas %c reduzida"
+           "\n\t\t\tao comer todas as bolas do jogo acaba a fase e come%ca \n\t\t\ta pr%cxima com aumento de velocidade dos fantasmas",a,b,g,a,h);
+
     mudacor(7);
-    printf("\t\tpressione qualquer tecla para continuar...");
+    printf("\n\n\t\tpressione qualquer tecla para continuar...");
     getch();
     menu();
+}
 void titulo1(void){
     static int anim_menu1=0,anim=0;
     int i,K,distanc=48;
